@@ -44,19 +44,19 @@ vgui.Register("JBScoreboard.PlayerRow",{
 
 		self.Avatar		= vgui.Create( "AvatarImage", self )
 		self.Avatar:SetSize( 32,32 )
-		self.Avatar:SetMouseInputEnabled( false )		
+		self.Avatar:SetMouseInputEnabled( false )
 
 		self:Dock( TOP )
 		self:SetHeight(64)
 		self:DockMargin( 8,0,-24,-12 )
-				
+
 	end,
 	PerformLayout = function(self)
 		if not IsValid(self.Player) then return end
-	
+
 		local w,h = self:GetWide(), self:GetTall();
 		self.Avatar:SetPos(h/2 - self.Avatar:GetTall()/2, h/2 - self.Avatar:GetTall()/2);
-	end,	
+	end,
 	Setup = function( self, pl )
 
 		self.Player = pl
@@ -91,16 +91,16 @@ vgui.Register("JBScoreboard.PlayerRow",{
 		if ( !IsValid( self.Player ) ) then
 			return
 		end
-		
-		
+
+
 		surface.SetDrawColor(self.Player:Alive() and JB.Color.white or JB.Color["#AAA"]);
-		
+
 		surface.SetMaterial(matEdge);
 		surface.DrawTexturedRectRotated(w-h/2,h/2,64,64,180);
-		
+
 		surface.SetMaterial(matMiddle);
 		surface.DrawTexturedRectRotated(math.Round(w/2) - 16,h/2,math.Round(w - 64 - 32),64,0);
-					
+
 	end,
 	OnMouseReleased=function(self)
 		if LocalPlayer():IsAdmin() then
@@ -108,6 +108,8 @@ vgui.Register("JBScoreboard.PlayerRow",{
 			local m = DermaMenu()
 
 			m:AddOption( "Force swap", function() RunConsoleCommand("jb_admin_swap",self.Player:SteamID() or "0"); end )
+			m:AddOption( "Make spectator", function() RunConsoleCommand("jb_admin_swap_spectator",self.Player:SteamID() or "0"); end )
+			m:AddOption( "Revive", function() RunConsoleCommand("jb_admin_revive",self.Player:SteamID() or "0"); end )
 
 			m:Open()
 
@@ -120,30 +122,30 @@ vgui.Register("JBScoreboard.PlayerRow",{
 		if ( !IsValid( self.Player ) ) then
 			return
 		end
-		
+
 		local col = team.GetColor(self.Player:Team());
 		if not self.Player:Alive() then
 			col.r = math.Clamp(col.r *.6,0,255);
 			col.g = math.Clamp(col.g *.6,0,255);
 			col.b = math.Clamp(col.b *.6,0,255);
 		end
-		
+
 		if self.Player == LocalPlayer() then
 			local add = math.abs(math.sin(CurTime() * 1) * 50);
 			col.r = math.Clamp(col.r +add,0,255);
 			col.g = math.Clamp(col.g +add,0,255);
 			col.b = math.Clamp(col.b +add,0,255);
 		end
-		
+
 		surface.SetDrawColor(col);
 		surface.SetMaterial(matAva);
 		surface.DrawTexturedRectRotated(h/2,h/2,64,64,0);
-		
+
 		local white = self.Player:Alive() and JB.Color.white or JB.Color["#BBB"]
-		
+
 		draw.SimpleText(self.Player:Nick(),"JBNormalShadow",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,JB.Color.black,0,1);
 		draw.SimpleText(self.Player:Nick(),"JBNormal",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,white,0,1);
-		
+
 		if self.Player.GetWarden and self.Player:GetWarden() then
 			draw.SimpleText("W","JBNormalShadow",w-32-24,h/2 - 1,JB.Color.black,1,1);
 			draw.SimpleText("W","JBNormal",w-32-24,h/2 - 1,white,1,1);
@@ -159,9 +161,9 @@ vgui.Register("JBScoreboard.PlayerRow.Spectator",{
 
 		self.Avatar		= vgui.Create( "AvatarImage", self )
 		self.Avatar:SetSize( 32,32 )
-		self.Avatar:SetMouseInputEnabled( false )		
+		self.Avatar:SetMouseInputEnabled( false )
 
-		self:SetSize(64,64)		
+		self:SetSize(64,64)
 	end,
 	PerformLayout = function(self)
 		if not IsValid(self.Player) then return end
@@ -169,7 +171,7 @@ vgui.Register("JBScoreboard.PlayerRow.Spectator",{
 		local w,h = self:GetWide(), self:GetTall();
 		self.Avatar:SetPos(w/2 - self.Avatar:GetTall()/2, h/2 - self.Avatar:GetTall()/2);
 
-	end,	
+	end,
 	Setup = function( self, pl )
 		self.Player = pl
 
@@ -215,7 +217,7 @@ vgui.Register("JBScoreboard.PlayerRow.Spectator",{
 
 			draw.RoundedBox(2,w/2 -w2/2,0,w2,h,JB.Color.black);
 			draw.RoundedBox(4,w/2 -w2/2 + 2,2,w2-4,h-4,JB.Color["#111"]);
-			
+
 			this.ColorText.a = Lerp(FrameTime()*1,this.ColorText.a,255);
 
 			w = JB.Util.drawSimpleShadowText(self.Player:Nick(),"JBSmall",w/2,h/2,this.ColorText,1,1);
@@ -237,16 +239,16 @@ vgui.Register("JBScoreboard.PlayerRow.Spectator",{
 		if ( !IsValid( self.Player ) ) then
 			return
 		end
-		
+
 		local col = team.GetColor(self.Player:Team());
-		
+
 		if self.Player == LocalPlayer() then
 			local add = math.abs(math.sin(CurTime() * 1) * 50);
 			col.r = math.Clamp(col.r +add,0,255);
 			col.g = math.Clamp(col.g +add,0,255);
 			col.b = math.Clamp(col.b +add,0,255);
 		end
-		
+
 		surface.SetDrawColor(col);
 		surface.SetMaterial(matAva);
 		surface.DrawTexturedRectRotated(w/2,h/2,64,64,0);
@@ -280,10 +282,10 @@ vgui.Register("JBScoreboard",{
 		self.Spectators:SetTextColor( color_text );
 		self.Spectators:Dock(TOP);
 		self.Spectators:SetContentAlignment( 5 )
-		self.Spectators:SetText("Spectators"); 
+		self.Spectators:SetText("Spectators");
 		self.Spectators:SizeToContents();
 		self.Spectators:DockMargin(0,3,0,0);
-		
+
 
 		self.ScoresSpectators = self.Footer:Add("Panel");
 		self.ScoresSpectators:Dock(TOP);
@@ -341,11 +343,11 @@ vgui.Register("JBScoreboard",{
 
 		self.ScoresGuards = self:Add( "DScrollPanel" )
 		self.ScoresGuards:Dock( LEFT )
-		
+
 		self.ScoresPrisoners = self:Add( "DScrollPanel" )
 		self.ScoresPrisoners:Dock( RIGHT )
 
-		
+
 		self:SetSize( 700, ScrH() - 200 )
 		self.y = -self:GetTall();
 		self.x = ScrW()/2 - self:GetWide()/2;
@@ -356,10 +358,10 @@ vgui.Register("JBScoreboard",{
 	PerformLayout = function( self )
 		self.ScoresGuards:SetWide(self:GetWide()/2 - 8);
 		self.ScoresPrisoners:SetWide(self:GetWide()/2 - 8);
-		
+
 		self.Credit:SetWide(self:GetWide());
 		self.Host:SetWide(self:GetWide());
-		
+
 		self.ScoresGuards:PerformLayout();
 		self.ScoresPrisoners:PerformLayout();
 
@@ -384,7 +386,7 @@ vgui.Register("JBScoreboard",{
 
 		local w,h = self:GetWide(),self:GetTall();
 
-		if not self.Expand then 
+		if not self.Expand then
 			if math.floor(self.y) > -h then
 				color_text.a = Lerp(FrameTime()*12,color_text.a,0);
 				color_shadow.a = color_text.a * .8;
@@ -414,7 +416,7 @@ vgui.Register("JBScoreboard",{
 				JB:DebugPrint("Scoreboard hidden");
 			end
 
-			return 
+			return
 		end
 
 		local target = (ScrH()/2 - h/2);
@@ -440,25 +442,25 @@ vgui.Register("JBScoreboard",{
 				self.Name:SetExpensiveShadow( 2, color_shadow )
 				self.Credit:SetExpensiveShadow( 1, color_shadow )
 				self.Host:SetExpensiveShadow( 1, color_shadow )
-				
+
 		end
 
 		for id, pl in pairs( player.GetAll() ) do
-			if ( IsValid( pl.ScoreEntry ) ) then 
+			if ( IsValid( pl.ScoreEntry ) ) then
 				if (pl:Team() != pl.ScoreEntry.Team or (not IsValid(pl.ScoreEntry.scoreboard)) or pl.ScoreEntry.scoreboard != self) then
 					JB:DebugPrint("Removed invalid score panel");
 					pl.ScoreEntry:MakeInvalid();
 				else
 					continue;
-				end	
+				end
 			end
-			
+
 			if pl:Team() == TEAM_GUARD or pl:Team() == TEAM_PRISONER then
 
 				pl.ScoreEntry = vgui.Create("JBScoreboard.PlayerRow" );
 				pl.ScoreEntry:Setup( pl );
-				
-				
+
+
 				if pl:Team() == TEAM_PRISONER then
 					self.ScoresPrisoners:AddItem( pl.ScoreEntry );
 					pl.ScoreEntry.scoreboard = self;
@@ -474,7 +476,7 @@ vgui.Register("JBScoreboard",{
 				pl.ScoreEntry.scoreboard = self;
 				pl.ScoreEntry.Team = pl:Team();
 			end
-		end		
+		end
 
 	end,
 },"Panel");

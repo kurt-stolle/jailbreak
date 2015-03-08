@@ -36,19 +36,20 @@ JB.Gamemode.PlayerInitialSpawn = function(gm,ply)
 end;
 
 JB.Gamemode.PlayerSpawn = function(gm,ply)
-	if JB.State == STATE_LASTREQUEST or JB.State == STATE_PLAYING or (JB.State != STATE_IDLE and CurTime() - JB.RoundStartTime > 10) then
+	if not ply._jb_forceRespawn and (JB.State == STATE_LASTREQUEST or JB.State == STATE_PLAYING or (JB.State != STATE_IDLE and CurTime() - JB.RoundStartTime > 10)) then
 		JB:DebugPrint("Killing player, round is in progress");
 		ply:KillSilent();
 		gm:PlayerSpawnAsSpectator(ply);
 		return;
 	end
 
+	ply._jb_forceRespawn=false
 	ply:StripWeapons();
 	ply:StripAmmo();
 
 	gm.BaseClass.PlayerSpawn(gm,ply);
 
-	ply.originalRunSpeed = ply:GetRunSpeed();	 
+	ply.originalRunSpeed = ply:GetRunSpeed();
 end;
 
 JB.Gamemode.PlayerDeathThink = function( gm,ply )
@@ -64,7 +65,7 @@ end
 JB.Gamemode.PlayerCanPickupWeapon = function( gm, ply, entity )
 	if !ply:Alive() then return false end
 	if not ply:CanPickupWeapon(entity) then return false end
-	
+
 	if entity.IsDropped and (not entity.BeingPickedUp or entity.BeingPickedUp != ply) then
 		return false;
 	end
@@ -86,31 +87,31 @@ JB.Gamemode.IsSpawnpointSuitable = function()
 end
 
 JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
-	
+
 	victim:SendNotification("You are muted until the round ends")
-	
+
 	if victim.GetWarden and IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden() == victim:GetWarden() then
 		JB:BroadcastNotification("The warden has died")
 		timer.Simple(.5,function()
 			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				if v:Alive() and v != victim then 
+				if v:Alive() and v != victim then
 					JB:BroadcastNotification("Prisoners get freeday");
 					break;
 				end
 			end
 		end);
 	end
-	
+
 	if IsValid(killer) and killer.IsPlayer and killer:IsPlayer()
-	and	killer:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD 
-	and killer.AddRebelStatus 
+	and	killer:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD
+	and killer.AddRebelStatus
 	and not killer:GetRebel()
 	and tonumber(JB.Config.rebelSensitivity) >= 1
 	and JB.State != STATE_LASTREQUEST then
 		JB:DebugPrint(killer:Nick().. "  is now a rebel!!");
 		killer:AddRebelStatus();
 	end
-	
+
 	if IsValid(killer) and killer.IsPlayer and killer:IsPlayer() and (killer:Team() == TEAM_GUARD or killer:Team() == TEAM_PRISONER) and killer:Alive() then
 		JB:BroadcastQuickNotification(victim:Nick().." was killed by "..killer:Nick());
 	else
@@ -139,7 +140,7 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 end
 
 JB.Gamemode.ScalePlayerDamage = function( gm, ply, hitgroup, dmginfo )
-	if ( hitgroup == HITGROUP_HEAD ) then   
+	if ( hitgroup == HITGROUP_HEAD ) then
         dmginfo:ScaleDamage( 3 )
     elseif ( hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM ) then
         dmginfo:ScaleDamage( 0.8 )
@@ -158,7 +159,7 @@ local fallsounds = {
 JB.Gamemode.OnPlayerHitGround = function(gm,ply, in_water, on_floater, speed)
    if in_water or speed < 460 or not IsValid(ply) then return end
 
-   local damage = math.pow(0.05 * (speed - 420), 1.30)			
+   local damage = math.pow(0.05 * (speed - 420), 1.30)
 
    if on_floater then damage = damage / 2 end
 
@@ -181,7 +182,7 @@ end
 JB.Gamemode.PlayerCanHearPlayersVoice = function( gm, listener, talker )
 	if (not talker:Alive() )
 		or (talker:Team() == TEAM_PRISONER and ((CurTime() - JB.RoundStartTime) < 30)) then return false,false; end
-	
+
 	if(talker.GetWarden and talker:GetWarden()) then
 		return true,false;
 	end
@@ -212,17 +213,17 @@ end)
 
 hook.Add("EntityTakeDamage", "JB.EntityTakeDamage.WeaponScale", function(ent, d)
 	local att = d:GetInflictor()
-	
+
 	if att:IsPlayer() then
 		local wep = att:GetActiveWeapon()
 
 		if IsValid(wep) and not wep.NoDistance and wep.EffectiveRange then
 			local dist = ent:GetPos():Distance(att:GetPos())
-			
+
 			if dist >= wep.EffectiveRange * 0.5 then
 				dist = dist - wep.EffectiveRange * 0.5
 				local mul = math.Clamp(dist / wep.EffectiveRange, 0, 1)
-			
+
 				d:ScaleDamage(1 - wep.DamageFallOff * mul)
 			end
 		end
@@ -231,7 +232,7 @@ end)
 
 hook.Add("PlayerHurt", "JB.PlayerHurt.MakeRebel", function(victim, attacker)
 	if !IsValid(attacker) or !IsValid(victim) or !attacker:IsPlayer() or !victim:IsPlayer() or tonumber(JB.Config.rebelSensitivity) != 2 then return end
-	if attacker:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD and attacker.SetRebel 
+	if attacker:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD and attacker.SetRebel
 	and not attacker:GetRebel()
 	and JB.State != STATE_LASTREQUEST then
 		attacker:AddRebelStatus();
@@ -281,7 +282,7 @@ function JB.Gamemode:AllowPlayerPickup( ply, object )
 end
 
 function JB.Gamemode:PlayerUse( ply, ent )
-	if not ply:Alive() or not (ply:Team() == TEAM_GUARD or ply:Team() == TEAM_PRISONER) then 
+	if not ply:Alive() or not (ply:Team() == TEAM_GUARD or ply:Team() == TEAM_PRISONER) then
 		return false
 	end
 	return true

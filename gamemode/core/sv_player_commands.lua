@@ -44,8 +44,8 @@ local drop = function( ply, cmd, args )
 			if v == weapon:GetClass() then return false end
 		end
 	end
-	
-	if IsValid(weapon) then 
+
+	if IsValid(weapon) then
 		JB:DamageLog_AddPlayerDrop( ply,weapon:GetClass() )
 
 		weapon.IsDropped = true;
@@ -74,7 +74,7 @@ JB.Util.addChatCommand("pickup",pickup);
 
 local function teamSwitch(p,cmd)
 	if !IsValid(p) then return end
-	
+
 	if cmd == "jb_team_select_guard" and JB:GetGuardsAllowed() > #team.GetPlayers(TEAM_GUARD) and p:Team() != TEAM_GUARD then
 		p:SetTeam(TEAM_GUARD);
 		p:KillSilent();
@@ -122,13 +122,13 @@ JB.Util.addChatCommand("swap",teamswap);
 JB.Util.addChatCommand("swapteam",teamswap);
 
 concommand.Add("jb_admin_swap",function(p,c,a)
-	
+
 	if not IsValid(p) or not p:IsAdmin() then return end
 
 	local steamid = a[1];
 
 	if not steamid then return end
-	
+
 	for k,v in ipairs(player.GetAll())do
 		if v:SteamID() == steamid then
 			if v:Team() == TEAM_GUARD then
@@ -145,12 +145,57 @@ concommand.Add("jb_admin_swap",function(p,c,a)
 				hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
 			end
 
-			for k,v in ipairs(player.GetAll())do
-				v:ChatPrint(p:Nick().." has force swapped "..v:Nick()..".");
+			for k,it in ipairs(player.GetAll())do
+				it:ChatPrint(p:Nick().." has force swapped "..v:Nick()..".");
 			end
 
-			break;
+			return;
 		end
 	end
-end)
 
+	p:ChatPrint("User not found! " ..steamid)
+end)
+concommand.Add("jb_admin_swap_spectator",function(p,c,a)
+
+	if not IsValid(p) or not p:IsAdmin() then return end
+
+	local steamid = a[1];
+
+	if not steamid then return end
+
+	for k,v in ipairs(player.GetAll())do
+		if v:SteamID() == steamid then
+			v:SetTeam(TEAM_SPECTATOR)
+			v:Kill()
+			for k,it in ipairs(player.GetAll())do
+				it:ChatPrint(p:Nick().." has made "..v:Nick().." a spectator.");
+			end
+			return;
+		end
+	end
+
+	p:ChatPrint("User not found! "..steamid)
+end)
+concommand.Add("jb_admin_revive",function(p,c,a)
+
+	if not IsValid(p) or not p:IsAdmin() then return end
+
+	local steamid = a[1];
+
+	if not steamid then return end
+
+	for k,v in ipairs(player.GetAll())do
+		if v:SteamID() == steamid then
+			v._jb_forceRespawn=true
+			v:Spawn()
+
+			for k,it in ipairs(player.GetAll())do
+				it:ChatPrint(p:Nick().." has revived "..v:Nick()..".")
+			end
+
+			return;
+		end
+	end
+
+	p:ChatPrint("User not found! "..steamid)
+end)
