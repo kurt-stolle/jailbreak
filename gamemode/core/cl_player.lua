@@ -42,15 +42,15 @@ function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
 	local ragdoll =  LocalPlayer():GetRagdollEntity();
     if IsValid(ragdoll) and LocalPlayer():GetObserverMode() == OBS_MODE_NONE then
         local eyes = ragdoll:GetAttachment( ragdoll:LookupAttachment( "eyes" ) );
-        
+
 		if not eyes then return end
-		
+
 	    local view = {
 	        origin = eyes.Pos,
 	        angles = eyes.Ang,
-			fov = 90, 
+			fov = 90,
 	    };
-	        
+
 	    return view;
 	end
 
@@ -63,13 +63,13 @@ function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
 		fovSmooth= Lerp(FrameTime()*5,fovSmooth,(fov + mulSpeed * 10 ));
 		angRightSmooth= -math.abs(math.sin(count)*1);
 		angUpSmooth= math.sin(count)*1.5;
-	else 
+	else
 		fovSmooth= Lerp(FrameTime()*20,fovSmooth,fov);
 		angRightSmooth= Lerp(FrameTime()*10,angRightSmooth,0);
 		angUpSmooth= Lerp(FrameTime()*10,angUpSmooth,0);
 		mulSpeed=0;
 		count=0;
-	end 
+	end
 
 	ang:RotateAroundAxis(ang:Right(),angRightSmooth * 2);
 	ang:RotateAroundAxis(ang:Up(),angUpSmooth * 2);
@@ -78,7 +78,7 @@ function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
 end
 
 hook.Add( "PreDrawHalos", "JB.PreDrawHalos.AddHalos", function()
-	if JB.LastRequest != "0" then
+	if JB.LastRequest != "0" and JB.LastRequestPlayers then
 		for k,v in pairs(JB.LastRequestPlayers)do
 			if not IsValid(v) or LocalPlayer() == v then continue; end
 
@@ -114,9 +114,9 @@ hook.Add( "RenderScreenspaceEffects", "JB.RenderScreenspaceEffects.ProcessHealth
 		tab[ "$pp_colour_mulr" ] = 0
 		tab[ "$pp_colour_mulg" ] = 0
 		tab[ "$pp_colour_mulb" ] = 0
-	 
+
 		DrawColorModify( tab )
-		
+
 	end
 end)
 

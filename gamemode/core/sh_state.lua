@@ -40,14 +40,14 @@
 --   _________________________
 --
 --
---   If you want to code your own mapvote, hook the JailBreakStartMapvote hook, 
---   start your own mapvote here. Remember to return true in order to stop the 
+--   If you want to code your own mapvote, hook the JailBreakStartMapvote hook,
+--   start your own mapvote here. Remember to return true in order to stop the
 --   round system for a while, while you run your mapvote.
 --
 --   _________________________
 --
 --
---   You might want to use the following functions as well if you're writing a 
+--   You might want to use the following functions as well if you're writing a
 --   custom mapvote:
 --
 --   JB:Mapvote_ExtendCurrentMap()
@@ -57,7 +57,7 @@
 --------------------------------------------------------------------------------------
 
 
-/* 
+/*
 
 Compatability hooks - implement these in your admin mods
 
@@ -67,7 +67,7 @@ function JB.Gamemode.JailBreakStartMapvote(rounds_passed,extentions_passed) // h
 	return false // return true in your own mapvote function, else there won't be a pause between rounds!
 end
 
-/* 
+/*
 
 State chaining
 
@@ -79,7 +79,7 @@ local function chainState(state,stateTime,stateCallback)
 		timer.Stop("JB.StateTimer");
 		timer.Destroy("JB.StateTimer");
 	end
-	
+
 	timer.Create("JB.StateTimer",stateTime,1,stateCallback);
 end
 
@@ -104,9 +104,9 @@ function JB:Mapvote_StartMapVote()			// You can call this from your admin mod/ma
 	return false;
 end
 
-/* 
+/*
 
-Enums 
+Enums
 
 */
 STATE_IDLE = 1; -- when the map loads, we wait for everyone to join
@@ -116,7 +116,7 @@ STATE_LASTREQUEST = 4; -- last request taking place, special rules apply
 STATE_ENDED = 5; -- round ended, waiting for next round to start
 STATE_MAPVOTE = 6; -- voting for a map, will result in either a new map loading or restarting the current without reloading
 
-/* 
+/*
 
 Network strings
 
@@ -138,14 +138,14 @@ function JB:NewRound(rounds_passed)
 	collectgarbage("collect");
 
 	JB.ThisRound = {};
-	
+
 	if SERVER then
-		game.CleanUpMap();	
-	
+		game.CleanUpMap();
+
 		rounds_passed = rounds_passed + 1;
 		JB.RoundsPassed = rounds_passed;
 		JB.RoundStartTime = CurTime();
-		
+
 		chainState(STATE_SETUP,tonumber(JB.Config.setupTime),function()
 			JB:DebugPrint("Setup finished, round started.")
 			chainState(STATE_PLAYING,(10*60) - tonumber(JB.Config.setupTime),function()
@@ -157,18 +157,22 @@ function JB:NewRound(rounds_passed)
 				JB:BroadcastNotification("Today is a freeday");
 			end
 		end);
-		
+
 		if IsValid(JB.TRANSMITTER) then
 			JB.TRANSMITTER:SetJBWarden_PVPDamage(false);
 			JB.TRANSMITTER:SetJBWarden_ItemPickup(false);
 			JB.TRANSMITTER:SetJBWarden_PointerType("0");
 			JB.TRANSMITTER:SetJBWarden(NULL);
 		end
-		
+
 		JB:BalanceTeams()
-		
-		JB.Util.iterate(player.GetAll()):SetRebel(false):Spawn();
-		
+
+		timer.Simple(0,function()
+			JB.Util.iterate(player.GetAll()):SetRebel(false):Spawn();
+			timer.Simple(1,function()
+				JB.Util.iterate(player.GetAll()):UnLock();
+			end)
+		end)
 		net.Start("JB.SendRoundUpdate"); net.WriteInt(STATE_SETUP,8); net.WriteInt(rounds_passed,32); net.Broadcast();
 	elseif CLIENT and IsValid(LocalPlayer()) then
 		notification.AddLegacy("Round "..rounds_passed,NOTIFY_GENERIC);
@@ -185,9 +189,10 @@ function JB:EndRound(winner)
 		end
 
 		chainState(STATE_ENDED,5,function()
+			JB.Util.iterate(player.GetAll()):Lock();
 			JB:NewRound();
 		end);
-			
+
 		net.Start("JB.SendRoundUpdate"); net.WriteInt(STATE_ENDED,8); net.WriteInt(winner or 0, 8); net.Broadcast();
 	elseif CLIENT then
 		notification.AddLegacy(winner == TEAM_PRISONER and "Prisoners win" or winner == TEAM_GUARD and "Guards win" or "Draw",NOTIFY_GENERIC);
@@ -213,9 +218,9 @@ elseif SERVER then
 				JB:NewRound();
 			end
 		end
-	
+
 		if (JB.State != STATE_PLAYING and JB.State != STATE_SETUP and JB.State != STATE_LASTREQUEST) or #team.GetPlayers(TEAM_GUARD) < 1 or #team.GetPlayers(TEAM_PRISONER) < 1 then return end
-		
+
 		local count_guard = JB:AliveGuards();
 		local count_prisoner = JB:AlivePrisoners();
 
@@ -240,7 +245,7 @@ hook.Add("InitPostEntity","JB.InitPostEntity.SpawnStateTransmit",function()
 		JB.TRANSMITTER = ents.Create("jb_transmitter_state");
 		JB.TRANSMITTER:Spawn();
 		JB.TRANSMITTER:Activate();
-		
+
 		chainState(STATE_IDLE,tonumber(JB.Config.joinTime),function()
 			wantStartup = true; -- request a startup.
 		end);
@@ -300,7 +305,7 @@ JB._IndexCallback.State = {
 		else
 			Error("Can not set state!")
 		end
-	end 
+	end
 }
 
 // Round-related methods.
@@ -315,7 +320,7 @@ JB._IndexCallback.RoundsPassed = {
 			Error("Can not set rounds passed!");
 		end
 	end
-} 
+}
 JB._IndexCallback.RoundStartTime = {
 	get = function()
 		return IsValid(JB.TRANSMITTER) and JB.TRANSMITTER.GetJBRoundStartTime and  JB.TRANSMITTER:GetJBRoundStartTime() or 0;
@@ -337,18 +342,18 @@ JB._IndexCallback.LastRequest = {
 	set = function(tab)
 		if not IsValid(JB.TRANSMITTER) or not SERVER then return end
 
-		if not tab or type(tab) != "table" or not tab.type or not JB.ValidLR(JB.LastRequestTypes[tab.type]) or not IsValid(tab.prisoner) or not IsValid(tab.guard) then 
+		if not tab or type(tab) != "table" or not tab.type or not JB.ValidLR(JB.LastRequestTypes[tab.type]) or not IsValid(tab.prisoner) or not IsValid(tab.guard) then
 			JB.TRANSMITTER:SetJBLastRequestPicked("0");
 			if not pcall(function() JB:DebugPrint("Attempted to select invalid LR: ",tab.type," ",tab.prisoner," ",tab.guard," ",type(tab)); end) then JB:DebugPrint("Unexptected LR sequence abortion!"); end
-			return 
+			return
 		end
-		
+
 		JB.TRANSMITTER:SetJBLastRequestPrisoner(tab.prisoner);
 		JB.TRANSMITTER:SetJBLastRequestGuard(tab.guard);
 		JB.TRANSMITTER:SetJBLastRequestPicked(tab.type);
-		
+
 		chainState(STATE_LASTREQUEST,180,function() JB:EndRound() end)
-		
+
 		JB.RoundStartTime = CurTime();
 
 		JB:BroadcastNotification(tab.prisoner:Nick().." requested a "..JB.LastRequestTypes[tab.type]:GetName(),{tab.prisoner,tab.guard})
@@ -383,7 +388,7 @@ JB._IndexCallback.LastRequestPlayers = {
 	end
 }
 
-/* 
+/*
 
 Prevent Cleanup
 
