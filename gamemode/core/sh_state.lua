@@ -167,12 +167,11 @@ function JB:NewRound(rounds_passed)
 
 		JB:BalanceTeams()
 
-		timer.Simple(0,function()
-			JB.Util.iterate(player.GetAll()):SetRebel(false):Spawn();
-			timer.Simple(1,function()
-				JB.Util.iterate(player.GetAll()):UnLock();
-			end)
+		JB.Util.iterate(player.GetAll()):SetRebel(false):Spawn();
+		timer.Simple(1,function()
+			JB.Util.iterate(player.GetAll()):Freeze(false);
 		end)
+
 		net.Start("JB.SendRoundUpdate"); net.WriteInt(STATE_SETUP,8); net.WriteInt(rounds_passed,32); net.Broadcast();
 	elseif CLIENT and IsValid(LocalPlayer()) then
 		notification.AddLegacy("Round "..rounds_passed,NOTIFY_GENERIC);
@@ -189,7 +188,7 @@ function JB:EndRound(winner)
 		end
 
 		chainState(STATE_ENDED,5,function()
-			JB.Util.iterate(player.GetAll()):Lock();
+			JB.Util.iterate(player.GetAll()):Freeze(true);
 			JB:NewRound();
 		end);
 
