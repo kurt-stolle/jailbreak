@@ -34,7 +34,7 @@
 -- Now with workshop support :)
 resource.AddWorkshop("389805614");
 
--- If the workshop fails, the files below will be downloaded from the server :)
+--[[ If the workshop fails, the files below will be downloaded from the server :)
 resource.AddFile("materials/jailbreak_excl/notify_bracket.png");
 resource.AddFile("materials/jailbreak_excl/hud_health.png");
 resource.AddFile("materials/jailbreak_excl/hud_health_bottom.png");
@@ -67,4 +67,4 @@ resource.AddFile("materials/jailbreak_excl/pointers/generic.png")
 resource.AddFile("materials/jailbreak_excl/pointers/exclamation.png")
 resource.AddFile("materials/jailbreak_excl/pointers/question.png")
 resource.AddFile("materials/jailbreak_excl/pointers/line.png")
-resource.AddFile("materials/jailbreak_excl/pointers/cross.png")
+resource.AddFile("materials/jailbreak_excl/pointers/cross.png")]]
