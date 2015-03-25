@@ -32,11 +32,11 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "M4A1"			
+SWEP.PrintName			= "M4A1"
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
-     
+
 SWEP.HoldType			= "ar2"
 SWEP.Base				= "weapon_jb_base"
 SWEP.Category			= "Jailbreak Weapons"
@@ -63,9 +63,9 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.ShootConeAdd	= 0.0065;
 SWEP.Primary.Ammo			= "smg1"
 
-SWEP.FakeIronSights = true; 
+SWEP.FakeIronSights = true;
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-4.25, -4.173, 1.08), ang = Vector(2.5, -0.101, 0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-7.881, -1.181, 0.239), ang = Vector(2.799, -1.4, -4.6)};
 SWEP.Positions[3] = {pos = Vector(6.534, -9, 0.708), ang = Vector(0,70,0)};

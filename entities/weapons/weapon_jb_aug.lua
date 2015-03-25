@@ -31,7 +31,7 @@
 -- ####################################################################################
 
 AddCSLuaFile()
-SWEP.PrintName			= "AUG"			
+SWEP.PrintName			= "AUG"
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
 
@@ -61,6 +61,6 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "smg1"
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-2.28, 0, 1.08), ang = Vector(0, 0, 0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-8.12, -7.441, 1.32), ang = Vector(1.1, -3, -9.301)};
 SWEP.Positions[3] = {pos = Vector(5.276, -11.891, -1.655), ang = Vector(-19.567, 63.11, -35.551)};

@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "AWP Sniper Rifle"			
+SWEP.PrintName			= "AWP Sniper Rifle"
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
@@ -67,7 +67,7 @@ SWEP.Secondary.DefaultClip	= -1
 
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-2.721, -3.859, 1.36), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-6.761, -3.859, -12.24), ang = Vector(0,0,0)};
 SWEP.Positions[3] = {pos = Vector(6.534, -14.094, 0.708), ang = Vector(0,70,0)};
 
@@ -97,10 +97,10 @@ if CLIENT then
 
 			surface.DrawRect(0, 0, (ScrW()-size) / 2, size);
 			surface.DrawRect(ScrW() - ((ScrW()-size) / 2), 0, (ScrW()-size) / 2, size);
-		
+
 			surface.DrawLine(0,ScrH()/2,ScrW(),ScrH()/2)
 			surface.DrawLine(ScrW()/2,0,ScrW()/2,ScrH())
-		
+
 			surface.SetDrawColor(JB.Color.black)
 			surface.SetMaterial(scopeMat)
 			surface.DrawTexturedRect( (ScrW()/2) - (size/2) , 0, size, size)

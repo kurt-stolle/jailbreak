@@ -33,7 +33,7 @@
 AddCSLuaFile()
 
 
-	SWEP.PrintName			= "P90"			
+	SWEP.PrintName			= "P90"
 
 
 SWEP.Slot				= 1
@@ -67,6 +67,6 @@ SWEP.Primary.Ammo			= "smg1"
 SWEP.FakeIronSights			= true;
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-1.721, 0, 1), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-5.72, -5.434, 1.84), ang = Vector(0,0,0)};
 SWEP.Positions[3] = {pos = Vector(7.953, -12.992, -0.394), ang = Vector(0,70,0)};

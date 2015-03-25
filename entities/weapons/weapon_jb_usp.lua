@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "H&K USP"			
+SWEP.PrintName			= "H&K USP"
 
 SWEP.Slot				= 2
 SWEP.SlotPos			= 1
@@ -62,15 +62,7 @@ SWEP.Primary.DefaultClip	= 36
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "pistol"
 
-SWEP.IronSightsPos = Vector(-2.12, -7.481, 1.6)
-SWEP.IronSightsAng = Vector(0, 0, 0)
-SWEP.IronSightsPos = Vector(-5.881, -7.481, 2.64)
-SWEP.IronSightsAng = Vector(0.1, 0.1, 0)
-SWEP.IronSightsPos = Vector(0.079, -15.355, -20)
-SWEP.IronSightsAng = Vector(70, 0, 0)
-
-
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-2.12, -7.481, 1.6), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-5.881, -7.481, 2.64), ang = Vector(0.1, 0.1, 0)};
 SWEP.Positions[3] = {pos = Vector(0.079, -15.355, -20), ang = Vector(70, 0, 0)};

@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "UMP45"			
+SWEP.PrintName			= "UMP45"
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
@@ -63,6 +63,6 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "smg1"
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-3.961, -4.803, 2.359), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-8.761, -9.056, 4.119), ang = Vector(-1.3, -0.401, -3.401)};
 SWEP.Positions[3] = {pos = Vector(8.739, -20, 0), ang = Vector(0,70,0)};

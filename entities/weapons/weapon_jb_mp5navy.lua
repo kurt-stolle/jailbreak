@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-	SWEP.PrintName			= "MP5"			
+	SWEP.PrintName			= "MP5"
 
 
 SWEP.Slot				= 1
@@ -64,6 +64,6 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "smg1"
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-2.08, -2.757, 2), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-5.361, -2.757, 1.879), ang = Vector(1.2, 0, 0)};
 SWEP.Positions[3] = {pos = Vector(6.377, -13.938, 0.393), ang = Vector(0,70,0)};

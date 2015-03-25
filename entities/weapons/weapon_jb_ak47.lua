@@ -33,7 +33,7 @@
 
 AddCSLuaFile()
 
-SWEP.PrintName			= "AK-47"			
+SWEP.PrintName			= "AK-47"
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
@@ -61,9 +61,9 @@ SWEP.Primary.Delay			= 0.14
 SWEP.Primary.DefaultClip	= 60
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "smg1"
-SWEP.ReloadSequenceTime 	= 1.85; 	
+SWEP.ReloadSequenceTime 	= 1.85;
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-1.92, -1.56, 1.759), ang = Vector(0.5, 0.5, 0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-6.56, -10.08, 2.519), ang = Vector(2.4, 0.1, 0)};
 SWEP.Positions[3] = {pos = Vector(6.534, -15.827, -5.277), ang = Vector(-3.58, 66.97, -26.733)};

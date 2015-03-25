@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-	SWEP.PrintName			= "TMP"			
+	SWEP.PrintName			= "TMP"
 
 SWEP.Slot				= 1
 SWEP.SlotPos			= 1
@@ -68,6 +68,6 @@ SWEP.FakeIronSights = true;
 
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-2.8, 0, 1.399), ang = Vector(0.1, -2.3, 0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-6.72, 0, 2.64), ang = Vector(-0.401, 0.6, 0)};
 SWEP.Positions[3] = {pos = Vector(7.322, -20, 0), ang = Vector(0,70,0)};

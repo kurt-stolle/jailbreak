@@ -32,7 +32,7 @@
 
 AddCSLuaFile()
 
-	SWEP.PrintName			= "Glock 18"			
+	SWEP.PrintName			= "Glock 18"
 
 
 SWEP.Slot				= 2
@@ -66,6 +66,6 @@ SWEP.Primary.Ammo			= "pistol"
 
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-1.241, 0, 2), ang = Vector(0,0,0)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-5.761, -2.126, 2.68), ang = Vector(0.699, 0.1, 0)};
 SWEP.Positions[3] = {pos = Vector(0, -15.669, -15.827), ang = Vector(70, 0.275, -0.276)};

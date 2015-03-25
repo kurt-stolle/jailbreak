@@ -33,7 +33,7 @@
 AddCSLuaFile()
 
 
-	SWEP.PrintName			= "Mac 10"			
+	SWEP.PrintName			= "Mac 10"
 
 
 SWEP.Slot				= 1
@@ -66,6 +66,6 @@ SWEP.Primary.Ammo			= "smg1"
 SWEP.FakeIronSights 		= true;
 
 SWEP.Positions = {};
-SWEP.Positions[1] = {pos = Vector(-5.16, 0.708, 2.16), ang = Vector(1.2, -5.401, -8.601)};
+SWEP.Positions[1] = {pos = Vector(0,0,0), ang = Vector(0,0,0)};
 SWEP.Positions[2] = {pos = Vector(-9.32, -5.749, 2.759 ), ang = Vector(1.2, -5.401, -8.601)};
 SWEP.Positions[3] = {pos = Vector(-5.119, -14.724, -13.938), ang = Vector(70, -1.93, -8.544)};
