@@ -32,7 +32,7 @@
 
 
 local color_text = Color(223,223,223,230);
-local matGradient = Material("materials/jailbreak_excl/gradient.png"); 
+local matGradient = Material("materials/jailbreak_excl/gradient.png");
 local frame;
 
 local slide_cur = 1;
@@ -45,10 +45,10 @@ local guide_slides={
 
 function JB.MENU_HELP_OPTIONS()
 	if IsValid(frame) then frame:Remove() end
-	
+
 	frame = vgui.Create("JB.Frame");
 	frame:SetTitle("INFORMATION & OPTIONS");
-	
+
 	frame:SetWide(740);
 
 	local right = frame:Add("JB.Panel");
@@ -61,15 +61,14 @@ function JB.MENU_HELP_OPTIONS()
 
 	left:SetTall(tall); right:SetTall(tall);
 
-	
+
 	left:SetPos(10,40);
 	right:SetPos(left:GetWide() + left.x + 10,40);
 
 	left.Paint = function() end;
-	
+
 	frame:SetTall(math.Round(right:GetTall() + 50))
 
-	/* Set up the menu options */
 	local btn_guide = left:Add("JB.Button");
 	btn_guide:SetSize(left:GetWide(),32);
 	btn_guide:SetText("Guide")
@@ -88,9 +87,8 @@ function JB.MENU_HELP_OPTIONS()
 	btn_credits:SetSize(left:GetWide(),32);
 	btn_credits:SetText("About")
 	btn_credits.y = 120;
-	
 
-	/* set up right panel population for each button */
+
 	btn_guide.OnMouseReleased = function()
 		JB.Util.iterate(right:GetChildren()):Remove();
 
@@ -135,7 +133,7 @@ function JB.MENU_HELP_OPTIONS()
 			slideshow:SetMaterial(guide_slides[slide_cur]);
 		end
 		go_left:SetVisible(false);
-		
+
 	end
 
 
@@ -161,20 +159,20 @@ function JB.MENU_HELP_OPTIONS()
 				return;
 			end
 
-			if logs_old != JB.ThisRound.Logs then
+			if logs_old ~= JB.ThisRound.Logs then
 				hook.Remove("Think","JB.Think._MENU_.CheckChangesToLogs");
 
 				local Panels = {};
 				local pnl;
 				for k,v in ipairs(JB.ThisRound.Logs)do
-					if not pnl or not pnl.subject or pnl.subject != v.subject then
+					if not pnl or not pnl.subject or pnl.subject ~= v.subject then
 						pnl=vgui.Create("EditablePanel");
 						table.insert(Panels,pnl);
 						pnl.Paint = function(self,w,h)
 							draw.RoundedBox(6,0,0,w,h-10,JB.Color["#111"]);
 							draw.RoundedBox(4,1,1,w-2,h-10-2,JB.Color["#333"]);
 							draw.RoundedBox(0,70- (60/2),1,60,h-2-10,JB.Color["#444"])
-						end					
+						end
 						pnl:SetWide(scrollPanel:GetWide());
 						pnl.subject = v.subject;
 					end
@@ -182,16 +180,12 @@ function JB.MENU_HELP_OPTIONS()
 					local textPanel=vgui.Create("Panel",pnl);
 					textPanel:SetWide(pnl:GetWide());
 					textPanel.Paint = function(self,w,h)
-						// time
 						JB.Util.drawSimpleShadowText(v.time,"JBExtraSmall",10,h/2,JB.Color.white,0,1,1);
 
-						// type
 						JB.Util.drawSimpleShadowText(v.kind,"JBExtraSmall",70,h/2,JB.Color.white,1,1,1);
 
-						//message
 						local clr=JB.Color.white
 						local x=70+(60/2)+10;
-						//local w;
 						for _,msg in pairs(v.message)do
 							if type(msg)=="table" and msg.r and msg.g and msg.b then
 								clr = msg;
@@ -229,10 +223,11 @@ function JB.MENU_HELP_OPTIONS()
 		local container=right:Add("Panel");
 		container:SetSize(right:GetWide()-40,right:GetTall()-lbl:GetTall()-lbl.y-40);
 		container:SetPos(20,lbl.y+lbl:GetTall()+20);
-		for k,v in pairs{
+		for k,v in ipairs{
 			{"jb_cl_option_toggleaim","toggle","Toggle aim (default: Right Mouse)"},
 			{"jb_cl_option_togglecrouch","toggle","Toggle crouch (default: CTRL)"},
-			{"jb_cl_option_togglewalk","toggle","Toggle walk (default: ALT)"}
+			{"jb_cl_option_togglewalk","toggle","Toggle walk (default: ALT)"},
+			{"jb_cl_option_always_spectate","toggle","Always spawn as spectator after joining"}
 		} do
 			local fragment=container:Add("Panel");
 			fragment:SetSize(container:GetWide(),32);
@@ -244,7 +239,7 @@ function JB.MENU_HELP_OPTIONS()
 			lbl:SetPos(32,fragment:GetTall()/2-lbl:GetTall()/2);
 			lbl:SetColor(color_text);
 
-			local DermaCheckbox = vgui.Create( "DCheckBox",fragment )// Create the checkbox
+			local DermaCheckbox = vgui.Create( "DCheckBox",fragment )
 			DermaCheckbox:SetPos( fragment:GetTall()/2 - DermaCheckbox:GetWide()/2,   fragment:GetTall()/2 - DermaCheckbox:GetTall()/2)// Set the position
 			DermaCheckbox:SetConVar( v[1] )
 		end
@@ -280,4 +275,3 @@ Copyright © Casual Bananas 2014 ]];
 
 	btn_guide.OnMouseReleased();
 end
-														
