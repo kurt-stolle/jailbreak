@@ -110,15 +110,15 @@ vgui.Register("JBHUDWardenFrame",{
 		self:SetSize(256,64);
 		self:SetPos(ScrW() - self:GetWide() - 16,32);
 		self.Player = NULL;
-	
+
 		self.Avatar = vgui.Create( "AvatarImage", self )
 		self.Avatar:SetSize( 32,32 )
 		self.Avatar:SetPos( 13,16 )
-		
+
 	end,
 	SetPlayer = function(self,ply)
 		if not IsValid(ply) then return end
-	
+
 		self.Player = ply
 		self.Avatar:SetPlayer( ply, 32 )
 	end,
@@ -126,7 +126,7 @@ vgui.Register("JBHUDWardenFrame",{
 		setDrawColor(JB.Color.white);
 		setMaterial(matWarden);
 		drawTexturedRect(0,0,256,64);
-		
+
 		if IsValid(self.Player) then
 			//draw.SimpleText(self.Player:Nick(),"JBNormalShadow",62,h/2,JB.Color.black,0,1);
 			drawSimpleShadowText(self.Player:Nick(),"JBNormal",62,h/2,JB.Color.white,0,1);
@@ -138,7 +138,7 @@ hook.Add("Think","JB.Think.PredictWardenFrame",function()
 		warden:Remove();
 		warden=nil;
 	end
-		
+
 	if IsValid(JB:GetWarden()) and not IsValid(warden) then
 		warden=vgui.Create("JBHUDWardenFrame");
 		warden:SetPlayer(JB:GetWarden());
@@ -181,40 +181,40 @@ local drawAmmoHealth = function()
 	setDrawColor(JB.Color.white);
 	setMaterial(matHealthBottom);
 	drawTexturedRect(0,0,256,256);
-		
+
 	noTexture();
 	setDrawColor(JB.Color["#CF1000"]);
 
 	drawHealth(256,256,24,86,healthMemory);
-		
+
 	setFont("JBExtraLarge");
 	wide_hp_1,height = getTextSize(health);
 	setFont("JBSmall");
 	wide_hp_2 = getTextSize(" %\n HP");
-		
+
 	activeWeapon = ply:GetActiveWeapon();
 
 	if IsValid(activeWeapon) and activeWeapon:Clip1() != -1 and activeWeapon:GetClass() != "weapon_gravgun" then
 		y = 64+32+12;
-				
+
 		drawSimpleShadowText(health,"JBExtraLarge",128-(wide_hp_1 + wide_hp_2)/2,y-height/2 - 6,JB.Color["#DCDCDC"],0,0);
 		drawText(" %\n HP ","JBSmallShadow",128-(wide_hp_1 + wide_hp_2)/2 + wide_hp_1,y-height/2,JB.Color.black,0,0);
 		drawText(" %\n HP ","JBSmall",128-(wide_hp_1 + wide_hp_2)/2 + wide_hp_1,y-height/2,JB.Color["#DCDCDC"],0,0);
-			
+
 		setDrawColor(JB.Color["#DCDCDC"]);
 		drawRect(128-40,128-2,1 + clamp(79 * (tonumber(ply:GetActiveWeapon():Clip1())/tonumber(ply:GetActiveWeapon().Primary and ply:GetActiveWeapon().Primary.ClipSize or 10)),0,79),4);
 
 		y = 128+16;
 		text_ammo = ply:GetActiveWeapon():Clip1() .. "/" .. ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType());
-			
+
 		drawSimpleShadowText("AMMO","JBExtraSmall",128-40,y,JB.Color["#DCDCDC"],0,1);
 		drawSimpleShadowText(text_ammo,"JBNormal",128+40,y,JB.Color["#DCDCDC"],2,1);
-	else	
+	else
 		drawSimpleShadowText(health,"JBExtraLarge",128-(wide_hp_1 + wide_hp_2)/2,128-height/2 - 6,JB.Color["#DCDCDC"],0,0);
 		drawText(" %\n HP ","JBSmallShadow",128-(wide_hp_1 + wide_hp_2)/2 + wide_hp_1,128-height/2,JB.Color.black,0,0);
 		drawText(" %\n HP ","JBSmall",128-(wide_hp_1 + wide_hp_2)/2 + wide_hp_1,128-height/2,JB.Color["#DCDCDC"],0,0);
 	end
-			
+
 	setDrawColor(JB.Color.white);
 	setMaterial(matHealth);
 	drawTexturedRect(0,0,256,256);
@@ -240,21 +240,21 @@ local drawSpectatorHUD = function()
 			specPosScreen = (plySpec:EyePos() + Vector(0,0,20)):ToScreen();
 			x,y=specPosScreen.x,specPosScreen.y;
 			specPosScreen = nil;
-				
+
 			local alpha = 50;
 			if ply:EyePos():Distance( plySpec:GetPos() ) < 1000 then
 				alpha = 255;
 			end
-				
+
 			drawSimpleShadowText(plySpec:Nick(),"JBNormal",x,y,Color(255,255,255,alpha),1,1);
-				
+
 			local col = table.Copy(JB.Color["#CF1000"]);
 			col.a = alpha;
-				
+
 			roundedBox(2,x - 30,y + 10,60,4,Color(0,0,0,alpha));
 			roundedBox(0,x - 30 + 1,y + 10 + 1,(60-2)*clamp(plySpec:Health()/100,0,1),2,col);
 			roundedBox(0,x - 30 + 1,y + 10 + 1,(60-2)*clamp(plySpec:Health()/100,0,1),1,Color(255,255,255,15 * alpha/255));
-		end		
+		end
 	end
 
 	//hint
@@ -289,12 +289,12 @@ local drawTimer = function()
 	if IsValid(warden) then
 		y = warden.y + warden:GetTall();
 	end
-	
+
 	setDrawColor(JB.Color.white);
 	setMaterial(matTime);
 	drawTexturedRect(scrW-16-128,y,128,64);
-	
-	local timerText = state == STATE_IDLE and "WAITING" or state == STATE_ENDED and "ENDED" or state == STATE_MAPVOTE and "MAPVOTE" or 
+
+	local timerText = state == STATE_IDLE and "WAITING" or state == STATE_ENDED and "ENDED" or state == STATE_MAPVOTE and "MAPVOTE" or
 	convertTime(60*(state == STATE_LASTREQUEST and 3 or 10) - (CurTime() - JB.RoundStartTime));
 
 	drawSimpleShadowText(timerText,"JBNormal",scrW-16-64,y+32,JB.Color.white,1,1);
@@ -305,12 +305,12 @@ local lrGuard,lrPrisoner;
 local drawLastRequest = function()
 	setMaterial(matLR)
 	setDrawColor(JB.Color.white)
-	
+
 	drawTexturedRect(scrW/2 - 256, 4,512,128);
-	
+
 	-- unpack from table;
 	lrGuard,lrPrisoner = unpack(JB.LastRequestPlayers);
-	
+
 	-- convert to string
 	lrGuard = IsValid(lrGuard) and lrGuard:Nick() or "ERROR!";
 	lrPrisoner = IsValid(lrPrisoner) and lrPrisoner:Nick() or "ERROR!";
@@ -332,7 +332,7 @@ local drawWardenPointer = function()
 	color_marker.a = (posMarkerScreen.x != x or posMarkerScreen.y != y+8) and 100 or 255;
 	color_marker_dark.a = color_marker.a;
 	setMaterial(marker.icon);
-		
+
 	setDrawColor(color_marker);
 	drawTexturedRect(x-16,y-16,32,32);
 
@@ -346,26 +346,38 @@ end
 local hookCall = hook.Call;
 JB.Gamemode.HUDPaint = function(gm)
 	ply = LocalPlayer();
-	
-	if not IsValid(ply) then return end	
+
+	if not IsValid(ply) then return end
 
 	scrW,scrH,dt=ScrW(),ScrH(),FrameTime();
 
-	state = JB.State;	
-	
+	state = JB.State;
+
 	if ply:Alive() then
 		drawAmmoHealth(); // alive and well
-	else 
+
+		-- ES support
+		if ES and ES.NotificationOffset then
+			ES.NotificationOffset.x = 24
+			ES.NotificationOffset.y = 232
+		end
+	else
 		drawSpectatorHUD(); // Spectator or dead.
+
+		-- ES support
+		if ES and ES.NotificationOffset then
+			ES.NotificationOffset.x = 24
+			ES.NotificationOffset.y = 24
+		end
 	end
-	
-	drawTimer();	
-	
+
+	drawTimer();
+
 	if JB.State == STATE_LASTREQUEST and JB.LastRequest != "0" then
 		drawLastRequest();
 	end
 
-	if #teamGetPlayers(TEAM_GUARD) < 1 or #teamGetPlayers(TEAM_PRISONER) < 1 then	
+	if #teamGetPlayers(TEAM_GUARD) < 1 or #teamGetPlayers(TEAM_PRISONER) < 1 then
 		drawText("A new round can not start until there is at least one player on both teams.\nWait for somebody to join the empty team.","JBNormalShadow",scrW/2,scrH * .6,JB.Color.black,1,1);
 		drawText("A new round can not start until there is at least one player on both teams.\nWait for somebody to join the empty team.","JBNormal",scrW/2,scrH * .6,JB.Color.white,1,1);
 	end
@@ -373,7 +385,7 @@ JB.Gamemode.HUDPaint = function(gm)
 	if IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden_PointerPos() and JB.TRANSMITTER:GetJBWarden_PointerType() and wardenMarkers[JB.TRANSMITTER:GetJBWarden_PointerType()] then
 		drawWardenPointer();
 	end
-	
+
 	JB.Gamemode:HUDDrawTargetID();  -- not calling hook, we don't want any addons messing with this.
 	hookCall("HUDPaintOver",JB.Gamemode)
 end;
@@ -384,9 +396,9 @@ JB.Gamemode.HUDDrawTargetID = function()
 	if LocalPlayer():GetObserverMode() != OBS_MODE_NONE then return end
 
 	ent = LocalPlayer():GetEyeTrace().Entity;
-	
+
 	if (not IsValid(ent) ) then return end;
-	
+
 	text = "ERROR"
 	text_sub = "Something went terribly wrong!";
 
@@ -403,7 +415,7 @@ JB.Gamemode.HUDDrawTargetID = function()
 			local bind = inputLookupBinding("+use");
 			text_sub = ent:GetPos():Distance(LocalPlayer():EyePos()) > 200 and "" or ((not bind) and "Bind a key to +use to pick up") or ("Press "..bind.." to pick up");
 		end
-		
+
 		text_color = JB.Color.white;
 	else
 		return
@@ -411,12 +423,12 @@ JB.Gamemode.HUDDrawTargetID = function()
 
 	text_x,text_y = scrW/2, scrH *.6;
 	drawSimpleShadowText(text,"JBNormal",text_x,text_y,text_color,1,1);
-	
+
 	if text_sub and text_sub != "" then
-		
+
 		setFont("JBNormal");
 		text_wide,text_tall = getTextSize(text);
-		
+
 		text_y = text_y + text_tall*.9;
 
 		drawSimpleShadowText(text_sub,"JBSmall",text_x,text_y,JB.Color.white,1,1);
@@ -424,7 +436,6 @@ JB.Gamemode.HUDDrawTargetID = function()
 	end
 end
 
-function JB.Gamemode:HUDShouldDraw(element) 
-	return (element ~= "CHudHealth" and element ~= "CHudBattery" and element ~= "CHudAmmo" and element ~= "CHudSecondaryAmmo" and element ~= "CHudMessage" and element ~= "CHudWeapon"); 
+function JB.Gamemode:HUDShouldDraw(element)
+	return (element ~= "CHudHealth" and element ~= "CHudBattery" and element ~= "CHudAmmo" and element ~= "CHudSecondaryAmmo" and element ~= "CHudMessage" and element ~= "CHudWeapon");
 end
-
