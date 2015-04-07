@@ -36,7 +36,7 @@ if SERVER then
    SWEP.Weight          = 5;
    SWEP.AutoSwitchTo    = false;
    SWEP.AutoSwitchFrom     = false;
-   
+
 end
 
 if CLIENT then
@@ -60,11 +60,11 @@ SWEP.PrintName            = "Knife"
 
 SWEP.UseHands = true;
 SWEP.ViewModel 				= "models/weapons/cstrike/c_knife_t.mdl"
-SWEP.WorldModel 				= "models/weapons/w_knife_t.mdl" 
+SWEP.WorldModel 				= "models/weapons/w_knife_t.mdl"
 SWEP.Weight			= 5
 SWEP.DrawCrosshair		= false
 SWEP.ViewModelFlip		= false
-SWEP.Primary.Damage = 40
+SWEP.Primary.Damage = 25
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= true
@@ -102,7 +102,7 @@ function SWEP:PrimaryAttack()
 		filter = self.Owner
 	} )
 
-	if ( !IsValid( tr_main.Entity ) ) then 
+	if ( !IsValid( tr_main.Entity ) ) then
 		tr_main = util.TraceHull( {
 			start = self.Owner:GetShootPos(),
 			endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.HitDistance,
@@ -124,7 +124,7 @@ function SWEP:PrimaryAttack()
          edata:SetOrigin(tr_main.HitPos)
          edata:SetNormal(tr_main.Normal)
          edata:SetEntity(hitEnt)
- 
+
          if hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll" then
             util.Effect("BloodImpact", edata)
             self.Owner:FireBullets({Num=1, Src=spos, Dir=self.Owner:GetAimVector(), Spread=Vector(0,0,0), Tracer=0, Force=1, Damage=0});
@@ -149,7 +149,7 @@ function SWEP:PrimaryAttack()
          dmg:SetDamagePosition(self.Owner:GetPos())
          dmg:SetDamageType(DMG_CLUB)
 
-         hitEnt:DispatchTraceAttack(dmg, spos + (self.Owner:GetAimVector() * 3), sdest)      
+         hitEnt:DispatchTraceAttack(dmg, spos + (self.Owner:GetAimVector() * 3), sdest)
       end
    end
 
