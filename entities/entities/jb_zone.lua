@@ -119,7 +119,7 @@ elseif CLIENT then
 		local ply = LocalPlayer()
 		local wep = ply:GetActiveWeapon()
 
-    if wep:GetClass()~="weapon_physgun" then return end
+    if not IsValid(ply) or not IsValid(wep) or wep:GetClass()~="weapon_physgun" then return end
 
 		local mins,maxs=self:OBBMins(),self:OBBMaxs();
 
