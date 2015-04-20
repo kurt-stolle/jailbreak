@@ -49,7 +49,7 @@ end
 
 function GM:CheckWeaponTable(class,model)
 	if clientModels[class] then return end
-	
+
 	timer.Simple(0,function()
 		clientModels[class] = ClientsideModel(model,RENDERGROUP_OPAQUE);
 		if IsValid(clientModels[class]) then
@@ -108,9 +108,9 @@ hook.Add("PostPlayerDraw","JB.PostPlayerDraw.DrawWeapons",function(p)
 					mdl:DrawModel();
 				end
 			end
-		elseif not mdl then
-			GAMEMODE:CheckWeaponTable( v:GetClass() , 
+		elseif not mdl and IsValid(v) and weapons.Get( v:GetClass( ) ) then
+			GAMEMODE:CheckWeaponTable( v:GetClass() ,
 			weapons.Get( v:GetClass( ) ).WorldModel );
-		end	
+		end
 	end
 end)
