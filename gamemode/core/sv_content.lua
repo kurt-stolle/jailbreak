@@ -36,6 +36,7 @@ resource.AddWorkshop("389805614");
 
 --[[ If the workshop fails, the files below will be downloaded from the server :)
 resource.AddFile("materials/jailbreak_excl/notify_bracket.png");
+resource.AddFile("materials/jailbreak_excl/hud_restricted.png");
 resource.AddFile("materials/jailbreak_excl/hud_health.png");
 resource.AddFile("materials/jailbreak_excl/hud_health_bottom.png");
 resource.AddFile("materials/jailbreak_excl/hud_warden_bar.png");

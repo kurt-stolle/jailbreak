@@ -33,7 +33,7 @@
 
 DEFINE_BASECLASS( "player_default" )
 
-local PLAYER = {} 
+local PLAYER = {}
 
 PLAYER.DisplayName			= "Guard"
 PLAYER.WalkSpeed 			= 260
@@ -65,7 +65,10 @@ function PLAYER:Loadout()
 	self.Player:GiveAmmo( 512, "SMG1", true )
 end
 
-function PLAYER:SetupDataTables() end
+function PLAYER:SetupDataTables()
+	self.Player:NetworkVar( "Bool", 1, "InGuardZone" );
+end
+
 
 util.PrecacheModel( "models/player/police.mdl" )
 function PLAYER:SetModel()

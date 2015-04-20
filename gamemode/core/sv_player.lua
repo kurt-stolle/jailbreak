@@ -63,7 +63,12 @@ JB.Gamemode.PlayerDeathThink = function( gm,ply )
 end
 
 JB.Gamemode.PlayerCanPickupWeapon = function( gm, ply, entity )
-	if !ply:Alive() then return false end
+	if not ply:Alive() then return false end
+
+	if entity:GetClass() == "weapon_physgun" then
+		return ply:IsSuperAdmin()
+	end
+
 	if not ply:CanPickupWeapon(entity) then return false end
 
 	if entity.IsDropped and (not entity.BeingPickedUp or entity.BeingPickedUp != ply) then

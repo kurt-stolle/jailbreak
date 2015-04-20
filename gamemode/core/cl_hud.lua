@@ -90,6 +90,8 @@ wardenMarkers["cross"] = {text="Avoid",icon=Material("jailbreak_excl/pointers/cr
 local x,y,width,height; -- reusables;
 local ply,dt,state,scrW,scrH; --predefined variables for every HUD loop
 
+local yRestricted=-64;
+
 // MATERIALS
 local matHealth = Material("materials/jailbreak_excl/hud_health.png");
 local matHealthBottom = Material("materials/jailbreak_excl/hud_health_bottom.png");
@@ -98,6 +100,7 @@ local matTime = Material("materials/jailbreak_excl/hud_time.png");
 local matLR = Material("materials/jailbreak_excl/lastrequest.png");
 local matHint = Material("materials/jailbreak_excl/pointers/pointer_background.png");
 local matQuestion = Material("materials/jailbreak_excl/pointers/question.png");
+local matRestricted = Material("materials/jailbreak_excl/hud_restricted.png")
 
 // COLORS
 local color_marker = Color(255,255,255,0);
@@ -361,6 +364,7 @@ JB.Gamemode.HUDPaint = function(gm)
 			ES.NotificationOffset.x = 24
 			ES.NotificationOffset.y = 232
 		end
+
 	else
 		drawSpectatorHUD(); // Spectator or dead.
 

@@ -33,7 +33,7 @@
 
 DEFINE_BASECLASS( "player_default" )
 
-local PLAYER = {} 
+local PLAYER = {}
 
 PLAYER.DisplayName			= "Prisoner"
 PLAYER.WalkSpeed 			= 260
@@ -52,7 +52,7 @@ PLAYER.AvoidPlayers			= false
 function PLAYER:Spawn()
 	self.Player:SetPlayerColor(Vector(.9,.9,.9));
 	self.Player:SetWeaponColor(Vector(.9,.9,.9));
-	
+
 	self.Player:SetRebel(false);
 
 	self.Player:GiveAmmo( 50, "Pistol", true )
@@ -64,7 +64,7 @@ local randomSpecialWeapon = { // Reminder to self: Never add weapons here; it ru
 }
 function PLAYER:Loadout()
 	self.Player:Give("weapon_jb_fists");
-	
+
 	if math.random(1,JB.Config.prisonerSpecialChance) == 1 then
 		self.Player:Give(table.Random(randomSpecialWeapon)); -- give the player a rando waeapon from our table.
 	end
@@ -72,6 +72,8 @@ end
 
 function PLAYER:SetupDataTables()
 	self.Player:NetworkVar( "Bool", 0, "Rebel" );
+
+	self.Player:NetworkVar( "Bool", 1, "InGuardZone" );
 end
 
 local prisonerModels = {
@@ -125,7 +127,7 @@ local prisonerModels = {
 	Model("models/player/Group01/female_05.mdl"),
 	Model("models/player/Group01/male_01.mdl"),
 	Model("models/player/Group01/male_03.mdl"),
-	
+
 -- Normal 'white' models
 	Model("models/player/Group01/female_02.mdl"),
 	Model("models/player/Group01/female_01.mdl"),
