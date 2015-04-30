@@ -12,7 +12,7 @@ if SERVER then
       local max = self.max or Vector(100,100,100)
 
       self:SetMoveType(MOVETYPE_NONE)
-			self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
+			self:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
 
 			self:SetTrigger(true)
 
