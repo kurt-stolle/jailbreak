@@ -192,15 +192,15 @@ function JB:EndRound(winner)
 			JB:NewRound();
 		end);
 
+		net.Start("JB.GetLogs");
+		net.WriteTable(JB.ThisRound and JB.ThisRound.Logs or {});
+		net.WriteBit(true);
+		net.Broadcast(p);
+
 		net.Start("JB.SendRoundUpdate"); net.WriteInt(STATE_ENDED,8); net.WriteInt(winner or 0, 8); net.Broadcast();
 	elseif CLIENT then
 		notification.AddLegacy(winner == TEAM_PRISONER and "Prisoners win" or winner == TEAM_GUARD and "Guards win" or "Draw",NOTIFY_GENERIC);
 	end
-
-	net.Start("JB.GetLogs");
-	net.WriteTable(JB.ThisRound and JB.ThisRound.Logs or {});
-	net.WriteBit(true);
-	net.Broadcast(p);
 
 	hook.Call("JailBreakRoundEnd",JB.Gamemode,JB.RoundsPassed);
 end
