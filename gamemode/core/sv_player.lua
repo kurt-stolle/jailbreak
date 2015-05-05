@@ -36,12 +36,13 @@ JB.Gamemode.PlayerInitialSpawn = function(gm,ply)
 end;
 
 JB.Gamemode.PlayerSpawn = function(gm,ply)
-	if not ply._jb_forceRespawn and (JB.State == STATE_LASTREQUEST or JB.State == STATE_PLAYING or (JB.State != STATE_IDLE and CurTime() - JB.RoundStartTime > 10)) then
-		JB:DebugPrint("Killing player, round is in progress");
-		ply:KillSilent();
-		gm:PlayerSpawnAsSpectator(ply);
-		return;
-	end
+		if (ply:Team() ~= TEAM_PRISONER and ply:Team() ~= TEAM_GUARD) or
+			(not ply._jb_forceRespawn and (JB.State == STATE_LASTREQUEST or JB.State == STATE_PLAYING or (JB.State ~= STATE_IDLE and CurTime() - JB.RoundStartTime > 10)))
+		then
+			ply:KillSilent();
+			gm:PlayerSpawnAsSpectator(ply);
+			return;
+		end
 
 	ply._jb_forceRespawn=false
 	ply:StripWeapons();
@@ -53,7 +54,7 @@ JB.Gamemode.PlayerSpawn = function(gm,ply)
 end;
 
 JB.Gamemode.PlayerDeathThink = function( gm,ply )
-	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) ) then
+	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) ) and ply:GetObserverMode() == OBS_MODE_NONE then
 		if JB.State == STATE_IDLE then
 			ply:Spawn();
 		else
@@ -71,7 +72,7 @@ JB.Gamemode.PlayerCanPickupWeapon = function( gm, ply, entity )
 
 	if not ply:CanPickupWeapon(entity) then return false end
 
-	if entity.IsDropped and (not entity.BeingPickedUp or entity.BeingPickedUp != ply) then
+	if entity.IsDropped and (not entity.BeingPickedUp or entity.BeingPickedUp ~= ply) then
 		return false;
 	end
 
@@ -81,7 +82,7 @@ JB.Gamemode.PlayerCanPickupWeapon = function( gm, ply, entity )
 end
 
 JB.Gamemode.PlayerShouldTakeDamage = function(gm,a,b)
-	if IsValid(a) and IsValid(b) and a:IsPlayer() and b:IsPlayer() and a:Team() == b:Team() and (JB.State == STATE_SETUP or JB.State == STATE_PLAYING or JB.State == STATE_LASTREQUEST) and (not IsValid(JB.TRANSMITTER) or a:Team() != TEAM_PRISONER or not JB.TRANSMITTER:GetJBWarden_PVPDamage()) then
+	if IsValid(a) and IsValid(b) and a:IsPlayer() and b:IsPlayer() and a:Team() == b:Team() and (JB.State == STATE_SETUP or JB.State == STATE_PLAYING or JB.State == STATE_LASTREQUEST) and (not IsValid(JB.TRANSMITTER) or a:Team() ~= TEAM_PRISONER or not JB.TRANSMITTER:GetJBWarden_PVPDamage()) then
 		return false
 	end
 	return true;
@@ -99,7 +100,7 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 		JB:BroadcastNotification("The warden has died")
 		timer.Simple(.5,function()
 			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				if v:Alive() and v != victim then
+				if v:Alive() and v ~= victim then
 					JB:BroadcastNotification("Prisoners get freeday");
 					break;
 				end
@@ -112,7 +113,7 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 	and killer.AddRebelStatus
 	and not killer:GetRebel()
 	and tonumber(JB.Config.rebelSensitivity) >= 1
-	and JB.State != STATE_LASTREQUEST then
+	and JB.State ~= STATE_LASTREQUEST then
 		JB:DebugPrint(killer:Nick().. "  is now a rebel!!");
 		killer:AddRebelStatus();
 	end
@@ -208,7 +209,7 @@ hook.Add("PlayerDisconnected","JB.PlayerDisconnected.CheckDisconnect",function(p
 end)
 
 hook.Add("DoPlayerDeath", "JB.DoPlayerDeath.DropWeapon", function(ply)
-	if IsValid(ply) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() != "jb_fists" then
+	if IsValid(ply) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() ~= "jb_fists" then
 		local wep = ply:GetActiveWeapon();
 		wep.IsDropped = true;
 		wep.BeingPickedUp = false;
@@ -236,10 +237,10 @@ hook.Add("EntityTakeDamage", "JB.EntityTakeDamage.WeaponScale", function(ent, d)
 end)
 
 hook.Add("PlayerHurt", "JB.PlayerHurt.MakeRebel", function(victim, attacker)
-	if !IsValid(attacker) or !IsValid(victim) or !attacker:IsPlayer() or !victim:IsPlayer() or tonumber(JB.Config.rebelSensitivity) != 2 then return end
+	if !IsValid(attacker) or !IsValid(victim) or !attacker:IsPlayer() or !victim:IsPlayer() or tonumber(JB.Config.rebelSensitivity) ~= 2 then return end
 	if attacker:Team() == TEAM_PRISONER and victim:Team() == TEAM_GUARD and attacker.SetRebel
 	and not attacker:GetRebel()
-	and JB.State != STATE_LASTREQUEST then
+	and JB.State ~= STATE_LASTREQUEST then
 		attacker:AddRebelStatus();
 	end
 end)

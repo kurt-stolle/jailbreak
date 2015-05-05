@@ -42,7 +42,7 @@ end
 
 --[[ PRISONER STATUS ]]
 function pmeta:AddRebelStatus()
-	if self:Team() != TEAM_PRISONER or not self:Alive() then
+	if self:Team() ~= TEAM_PRISONER or not self:Alive() then
 		return
 	end
 
@@ -66,7 +66,7 @@ end
 
 --[[ WARDEN STATUS ]]
 function pmeta:AddWardenStatus()
-	if self:Team() != TEAM_GUARD or not self:Alive() or not IsValid(JB.TRANSMITTER) then
+	if self:Team() ~= TEAM_GUARD or not self:Alive() or not IsValid(JB.TRANSMITTER) then
 		return
 	end
 
@@ -82,7 +82,7 @@ function pmeta:RemoveWardenStatus()
 	JB.TRANSMITTER:SetJBWarden(NULL);
 end
 function pmeta:SetupHands( ply )
-	if IsValid(ply) and ply != self then return end // we don't need in-eye spectator.
+	if IsValid(ply) and ply ~= self then return end // we don't need in-eye spectator.
 
 	local oldhands = self:GetHands()
 	if ( IsValid( oldhands ) ) then

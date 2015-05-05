@@ -32,7 +32,7 @@
 
 
 local function claimWarden(p,c,a)
-	if not IsValid(p) or p:Team() != TEAM_GUARD or JB.State != STATE_SETUP or IsValid(JB:GetWarden()) then return end
+	if not IsValid(p) or p:Team() ~= TEAM_GUARD or JB.State ~= STATE_SETUP or IsValid(JB:GetWarden()) then return end
 
 	if p.wardenRounds and p.wardenRounds >= tonumber(JB.Config.maxWardenRounds) and (  CurTime() - JB.RoundStartTime ) < 20 then
 		p:SendQuickNotification("You have to give others a chance to claim warden.");
@@ -139,7 +139,7 @@ concommand.Add("jb_warden_placepointer",function(p,c,a)
 end);
 
 hook.Add("Think","JB.Think.PointerTimeout",function()
-	if CurTime() > pointerRemove and pointerRemove != -1 then
+	if CurTime() > pointerRemove and pointerRemove ~= -1 then
 		JB.TRANSMITTER:SetJBWarden_PointerType("0");
 	end
 end);

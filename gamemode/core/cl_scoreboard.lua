@@ -447,7 +447,7 @@ vgui.Register("JBScoreboard",{
 
 		for id, pl in pairs( player.GetAll() ) do
 			if ( IsValid( pl.ScoreEntry ) ) then
-				if (pl:Team() != pl.ScoreEntry.Team or (not IsValid(pl.ScoreEntry.scoreboard)) or pl.ScoreEntry.scoreboard != self) then
+				if (pl:Team() ~= pl.ScoreEntry.Team or (not IsValid(pl.ScoreEntry.scoreboard)) or pl.ScoreEntry.scoreboard ~= self) then
 					JB:DebugPrint("Removed invalid score panel");
 					pl.ScoreEntry:MakeInvalid();
 				else

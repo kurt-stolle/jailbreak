@@ -39,7 +39,7 @@ end)
 
 function JB.Gamemode:KeyPress( ply, key )
    if ( not IsFirstTimePredicted() ) then return end
-   if ( not IsValid( ply ) or ply != LocalPlayer() ) then return end
+   if ( not IsValid( ply ) or ply ~= LocalPlayer() ) then return end
 end
 
 local fovSmooth;
@@ -85,7 +85,7 @@ function JB.Gamemode:CalcView( ply, pos, ang, fov, nearZ, farZ )
 end
 
 hook.Add( "PreDrawHalos", "JB.PreDrawHalos.AddHalos", function()
-	if JB.LastRequest != "0" and JB.LastRequestPlayers then
+	if JB.LastRequest ~= "0" and JB.LastRequestPlayers then
 		for k,v in pairs(JB.LastRequestPlayers)do
 			if not IsValid(v) or LocalPlayer() == v then continue; end
 
@@ -102,7 +102,7 @@ hook.Add( "RenderScreenspaceEffects", "JB.RenderScreenspaceEffects.ProcessHealth
 	if LocalPlayer():GetObserverMode() == OBS_MODE_NONE then
 		local ft = FrameTime();
 
-		if lastHealth != LocalPlayer():Health() then
+		if lastHealth ~= LocalPlayer():Health() then
 			approachOne = 0;
 		end
 		lastHealth = LocalPlayer():Health();

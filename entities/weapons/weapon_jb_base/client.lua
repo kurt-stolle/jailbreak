@@ -140,7 +140,7 @@ function SWEP:GetViewModelPosition( pos, ang )
 	self.smPos = LerpVector(time,self.smPos or self.Positions[mode].pos,idealPos);
 	self.smAng = LerpVector(time,self.smAng or self.Positions[mode].ang,self.Positions[mode].ang);
 
-	if !self.lastMode or mode != self.lastMode then
+	if !self.lastMode or mode ~= self.lastMode then
 		self.lastMode = mode;
 
 		if mode == MODE_AIM then

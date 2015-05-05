@@ -54,7 +54,7 @@ function ENT:Draw()
 
 	local weapon_name = wep:GetClass()
 
-	if ( weapon_name != "weapon_physgun" ) then
+	if ( weapon_name ~= "weapon_physgun" ) then
 		return
 	end
 

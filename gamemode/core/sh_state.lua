@@ -197,6 +197,11 @@ function JB:EndRound(winner)
 		notification.AddLegacy(winner == TEAM_PRISONER and "Prisoners win" or winner == TEAM_GUARD and "Guards win" or "Draw",NOTIFY_GENERIC);
 	end
 
+	net.Start("JB.GetLogs");
+	net.WriteTable(JB.ThisRound and JB.ThisRound.Logs or {});
+	net.WriteBit(true);
+	net.Broadcast(p);
+
 	hook.Call("JailBreakRoundEnd",JB.Gamemode,JB.RoundsPassed);
 end
 
@@ -218,7 +223,7 @@ elseif SERVER then
 			end
 		end
 
-		if (JB.State != STATE_PLAYING and JB.State != STATE_SETUP and JB.State != STATE_LASTREQUEST) or #team.GetPlayers(TEAM_GUARD) < 1 or #team.GetPlayers(TEAM_PRISONER) < 1 then return end
+		if (JB.State ~= STATE_PLAYING and JB.State ~= STATE_SETUP and JB.State ~= STATE_LASTREQUEST) or #team.GetPlayers(TEAM_GUARD) < 1 or #team.GetPlayers(TEAM_PRISONER) < 1 then return end
 
 		local count_guard = JB:AliveGuards();
 		local count_prisoner = JB:AlivePrisoners();
@@ -341,7 +346,7 @@ JB._IndexCallback.LastRequest = {
 	set = function(tab)
 		if not IsValid(JB.TRANSMITTER) or not SERVER then return end
 
-		if not tab or type(tab) != "table" or not tab.type or not JB.ValidLR(JB.LastRequestTypes[tab.type]) or not IsValid(tab.prisoner) or not IsValid(tab.guard) then
+		if not tab or type(tab) ~= "table" or not tab.type or not JB.ValidLR(JB.LastRequestTypes[tab.type]) or not IsValid(tab.prisoner) or not IsValid(tab.guard) then
 			JB.TRANSMITTER:SetJBLastRequestPicked("0");
 			if not pcall(function() JB:DebugPrint("Attempted to select invalid LR: ",tab.type," ",tab.prisoner," ",tab.guard," ",type(tab)); end) then JB:DebugPrint("Unexptected LR sequence abortion!"); end
 			return

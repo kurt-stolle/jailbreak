@@ -63,7 +63,7 @@ local SwingSound = Sound( "weapons/slam/throw.wav" )
 local HitSound = Sound( "Flesh.ImpactHard" )
 
 function SWEP:PreDrawViewModel( vm, wep, ply )
-	if not self:GetRaised() then 
+	if not self:GetRaised() then
 		self.Correct = true;
 		render.SetBlend(0);
 	else
@@ -131,7 +131,7 @@ end
 
 function SWEP:Reload()
 	if self.NextReload and self.NextReload > CurTime() then return end
-	
+
 	self:SetRaised(not self:GetRaised());
 	if CLIENT then
 		if self:GetRaised() and IsFirstTimePredicted() then
@@ -158,7 +158,7 @@ function SWEP:DealDamage()
 		filter = self.Owner
 	} )
 
-	if ( !IsValid( tr.Entity ) ) then 
+	if ( !IsValid( tr.Entity ) ) then
 		tr = util.TraceHull( {
 			start = self.Owner:GetShootPos(),
 			endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.HitDistance,
@@ -180,7 +180,7 @@ function SWEP:DealDamage()
 		dmginfo:SetAttacker( attacker )
 
 		dmginfo:SetInflictor( self )
-		dmginfo:SetDamage( math.random( 8, 12 ) )
+		dmginfo:SetDamage( math.random( 8,12 ) )
 
 		if ( anim == "fists_left" ) then
 			dmginfo:SetDamageForce( self.Owner:GetRight() * 49125 + self.Owner:GetForward() * 99984 ) -- Yes we need those specific numbers
@@ -188,7 +188,7 @@ function SWEP:DealDamage()
 			dmginfo:SetDamageForce( self.Owner:GetRight() * -49124 + self.Owner:GetForward() * 99899 )
 		elseif ( anim == "fists_uppercut" ) then
 			dmginfo:SetDamageForce( self.Owner:GetUp() * 51589 + self.Owner:GetForward() * 100128 )
-			dmginfo:SetDamage( math.random( 12, 40 ) )
+			dmginfo:SetDamage( math.random( 10, 40 ) )
 		end
 
 		tr.Entity:TakeDamageInfo( dmginfo )
@@ -204,7 +204,7 @@ function SWEP:DealDamage()
 	end
 
 	if ( SERVER ) then
-		if ( hit && anim != "fists_uppercut" ) then
+		if ( hit && anim ~= "fists_uppercut" ) then
 			self:SetCombo( self:GetCombo() + 1 )
 		else
 			self:SetCombo( 0 )
@@ -242,7 +242,7 @@ function SWEP:Deploy()
 	if ( SERVER ) then
 		self:SetCombo( 0 )
 	end
-	
+
 	self:SetRaised(false);
 
 	return true
@@ -251,7 +251,7 @@ end
 
 function SWEP:Think()
 	if self:GetRaised() then
-	
+
 		local vm = self.Owner:GetViewModel()
 		local curtime = CurTime()
 		local idletime = self:GetNextIdle()
@@ -279,7 +279,7 @@ function SWEP:Think()
 			self:SetCombo( 0 )
 
 		end
-		
+
 	end
 end
 
@@ -322,11 +322,11 @@ index=nil;
 function SWEP:TranslateActivity( act )
 
 	if self:GetRaised() then
-		if ( self.ActivityTranslateRaised[ act ] != nil ) then
+		if ( self.ActivityTranslateRaised[ act ] ~= nil ) then
 			return self.ActivityTranslateRaised[ act ]
 		end
 	else
-		if ( self.ActivityTranslateNotRaised[ act ] != nil ) then
+		if ( self.ActivityTranslateNotRaised[ act ] ~= nil ) then
 			return self.ActivityTranslateNotRaised[ act ]
 		end
 	end

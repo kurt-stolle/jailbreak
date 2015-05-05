@@ -40,7 +40,7 @@ function JB.MENU_LR()
 	frame = vgui.Create("JB.Frame");
 	frame:SetTitle("Last Request");
 	
-	if (JB.State != STATE_PLAYING and JB.State != STATE_SETUP and JB.State != STATE_LASTREQUEST) or JB.AlivePrisoners() > 1 or JB:AliveGuards() < 1 or not LocalPlayer():Alive() then
+	if (JB.State ~= STATE_PLAYING and JB.State ~= STATE_SETUP and JB.State ~= STATE_LASTREQUEST) or JB.AlivePrisoners() > 1 or JB:AliveGuards() < 1 or not LocalPlayer():Alive() then
 		
 		local lbl = Label("A last request is a last chance for the prisoner team to win the round if all rebelling attempts failed.\nIt will consist of a small game the prisoner doing the request can play against a guard of his choice.\n\nYou can only start a Last Request if you're the last prisoner alive and the round is in progress.",frame);
 		lbl:SetFont("JBSmall");

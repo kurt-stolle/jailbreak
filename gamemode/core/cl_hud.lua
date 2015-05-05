@@ -137,7 +137,7 @@ vgui.Register("JBHUDWardenFrame",{
 	end,
 },"Panel");
 hook.Add("Think","JB.Think.PredictWardenFrame",function()
-	if IsValid(warden) and (not IsValid(JB:GetWarden()) or warden.Player != JB:GetWarden()) then
+	if IsValid(warden) and (not IsValid(JB:GetWarden()) or warden.Player ~= JB:GetWarden()) then
 		warden:Remove();
 		warden=nil;
 	end
@@ -197,7 +197,7 @@ local drawAmmoHealth = function()
 
 	activeWeapon = ply:GetActiveWeapon();
 
-	if IsValid(activeWeapon) and activeWeapon:Clip1() != -1 and activeWeapon:GetClass() != "weapon_gravgun" then
+	if IsValid(activeWeapon) and activeWeapon:Clip1() ~= -1 and activeWeapon:GetClass() ~= "weapon_gravgun" then
 		y = 64+32+12;
 
 		drawSimpleShadowText(health,"JBExtraLarge",128-(wide_hp_1 + wide_hp_2)/2,y-height/2 - 6,JB.Color["#DCDCDC"],0,0);
@@ -332,7 +332,7 @@ local drawWardenPointer = function()
 
 	marker= wardenMarkers[JB.TRANSMITTER:GetJBWarden_PointerType()];
 
-	color_marker.a = (posMarkerScreen.x != x or posMarkerScreen.y != y+8) and 100 or 255;
+	color_marker.a = (posMarkerScreen.x ~= x or posMarkerScreen.y ~= y+8) and 100 or 255;
 	color_marker_dark.a = color_marker.a;
 	setMaterial(marker.icon);
 
@@ -377,7 +377,7 @@ JB.Gamemode.HUDPaint = function(gm)
 
 	drawTimer();
 
-	if JB.State == STATE_LASTREQUEST and JB.LastRequest != "0" then
+	if JB.State == STATE_LASTREQUEST and JB.LastRequest ~= "0" then
 		drawLastRequest();
 	end
 
@@ -397,7 +397,7 @@ end;
 // TARGET ID
 local uniqueid,ent,text_x,text_y,text,text_sub,text_wide,text_tall,text_color;
 JB.Gamemode.HUDDrawTargetID = function()
-	if LocalPlayer():GetObserverMode() != OBS_MODE_NONE then return end
+	if LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return end
 
 	ent = LocalPlayer():GetEyeTrace().Entity;
 
@@ -428,7 +428,7 @@ JB.Gamemode.HUDDrawTargetID = function()
 	text_x,text_y = scrW/2, scrH *.6;
 	drawSimpleShadowText(text,"JBNormal",text_x,text_y,text_color,1,1);
 
-	if text_sub and text_sub != "" then
+	if text_sub and text_sub ~= "" then
 
 		setFont("JBNormal");
 		text_wide,text_tall = getTextSize(text);

@@ -152,7 +152,7 @@ if SERVER then
 			end);
 
 			for k,v in ipairs(JB.LastRequestPlayers)do
-				if IsValid(v) and v != ply then
+				if IsValid(v) and v ~= ply then
 					v:Kill();
 				end
 			end

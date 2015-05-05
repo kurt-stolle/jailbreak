@@ -78,7 +78,7 @@ function JB.MENU_TEAM()
 	butPrisoner:SetPos(butGuard.x + butGuard:GetWide() + 15,frame:GetTall()-15-32-15-32);
 	butPrisoner:SetText("Prisoners ( "..#team.GetPlayers(TEAM_PRISONER).." )");
 	butPrisoner.OnMouseReleased = function()
-		if LocalPlayer():Team() != TEAM_PRISONER then
+		if LocalPlayer():Team() ~= TEAM_PRISONER then
 			RunConsoleCommand("jb_team_select_prisoner");
 		end
 		frame:Remove();
@@ -89,7 +89,7 @@ function JB.MENU_TEAM()
 	butSpec:SetPos(15,butPrisoner.y + butPrisoner:GetTall()+15);
 	butSpec:SetText("Spectate");
 	butSpec.OnMouseReleased = function()
-		if LocalPlayer():Team() != TEAM_SPECTATOR then
+		if LocalPlayer():Team() ~= TEAM_SPECTATOR then
 			RunConsoleCommand("jb_team_select_spectator");
 		end
 		frame:Remove();

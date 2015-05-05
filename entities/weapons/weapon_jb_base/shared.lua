@@ -233,7 +233,7 @@ function SWEP:Think()
 	if CLIENT and IsValid(self) then
 			speed= self.Owner:GetVelocity():Length();
 
-			if speed > self.Owner:GetWalkSpeed() + 20 and self.Owner:KeyDown(IN_SPEED) and self:GetNWMode() != MODE_SPRINT then
+			if speed > self.Owner:GetWalkSpeed() + 20 and self.Owner:KeyDown(IN_SPEED) and self:GetNWMode() ~= MODE_SPRINT then
 				self:SetNWMode(MODE_SPRINT);
 			elseif speed <= 10 and self.Owner:KeyDown(IN_SPEED) and self:GetNWMode() == MODE_SPRINT then
 				self:SetNWMode(MODE_NORMAL);
@@ -278,9 +278,9 @@ function SWEP:Think()
 		end
 	end
 
-	if SERVER and self:GetNWMode() == MODE_AIM and self.Owner:GetWalkSpeed() != self.originalWalkSpeed*.65 then
+	if SERVER and self:GetNWMode() == MODE_AIM and self.Owner:GetWalkSpeed() ~= self.originalWalkSpeed*.65 then
 		self.Owner:SetWalkSpeed(self.originalWalkSpeed*.65)
-	elseif SERVER and self:GetNWMode() != MODE_AIM and self.Owner:GetWalkSpeed() != self.originalWalkSpeed then
+	elseif SERVER and self:GetNWMode() ~= MODE_AIM and self.Owner:GetWalkSpeed() ~= self.originalWalkSpeed then
 		self.Owner:SetWalkSpeed(self.originalWalkSpeed)
 	end
 
@@ -472,22 +472,22 @@ function SWEP:TranslateActivity( act )
 	local holdtype = string.lower(self.HoldType);
 
 	if ( holdtype == "ar2" or holdtype=="smg" ) then
-		if self:GetNWMode() == MODE_NORMAL and ActivityTranslateHipFire[ act ] != nil  then
+		if self:GetNWMode() == MODE_NORMAL and ActivityTranslateHipFire[ act ] ~= nil  then
 			return ActivityTranslateHipFire[ act ]
-		elseif self:GetNWMode() == MODE_SPRINT and ActivityTranslateSprintRifle[ act ] != nil then
+		elseif self:GetNWMode() == MODE_SPRINT and ActivityTranslateSprintRifle[ act ] ~= nil then
 			return ActivityTranslateSprintRifle[act];
 		end
 	end
 
 	if ( holdtype == "revolver" or holdtype=="pistol") then
-		if self:GetNWMode() == MODE_NORMAL and holdtype == "revolver" and ActivityTranslatePistolNoAim[ act ] != nil  then
+		if self:GetNWMode() == MODE_NORMAL and holdtype == "revolver" and ActivityTranslatePistolNoAim[ act ] ~= nil  then
 			return ActivityTranslatePistolNoAim[ act ]
-		elseif self:GetNWMode() == MODE_SPRINT and ActivityTranslateSprintPistol[ act ] != nil  then
+		elseif self:GetNWMode() == MODE_SPRINT and ActivityTranslateSprintPistol[ act ] ~= nil  then
 			return ActivityTranslateSprintPistol[ act ]
 		end
 	end
 
-	if ( self.ActivityTranslate[ act ] != nil ) then
+	if ( self.ActivityTranslate[ act ] ~= nil ) then
 		return self.ActivityTranslate[ act ]
 	end
 

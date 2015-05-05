@@ -87,7 +87,7 @@ setmetatable(JB.Config,{
 		if config[key] then
 			if SERVER then
 				local val = GetConVarString(config[key].name);
-				return val and val != "" and val or config[key] and config[key].default or "0";
+				return val and val ~= "" and val or config[key] and config[key].default or "0";
 			elseif CLIENT then
 				return config[key].v or config[key].default;
 			end

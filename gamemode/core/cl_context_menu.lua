@@ -95,7 +95,7 @@ hook.Add("HUDPaintOver","JB.HUDPaintOver.PaintContextMenu",function()
 			setMaterial(matPointerBg);
 
 			if not v.color then v.color = Color(50,50,50,0) end
-			
+
 			v.color.a = color.a;
 			if v.selected then
 				v.color.r = Lerp(mul,v.color.r,255);
@@ -116,11 +116,11 @@ hook.Add("HUDPaintOver","JB.HUDPaintOver.PaintContextMenu",function()
 			end
 			draw.DrawText(v.text,"JBNormalShadow",x+32,y+64+14,color_black,1);
 			draw.DrawText(v.text,"JBNormal",x+32,y+64+14,color,1);
-		end		
+		end
 	popModelMatrix()
 	popFilterMag()
 	popFilterMin()
-	
+
 end);
 
 local xRel,yRel,ang;
@@ -136,7 +136,6 @@ hook.Add("Think","JB.Think.ContextMenuLogic",function()
 
 		if xRel > x-64 and xRel < x and yRel > y-64 and yRel < y then
 			v.selected = true;
-			print("selected");
 		else
 			v.selected = false;
 		end
@@ -174,13 +173,13 @@ concommand.Add( "+menu_context",function()
 	end
 end);
 
-local function closeContext()	
+local function closeContext()
 	if not contextEnabled then return end
 
 	gui.EnableScreenClicker(false);
 	contextEnabled = false;
 
-	for k,v in pairs(bubbles)do 
+	for k,v in pairs(bubbles)do
 		if v.selected then
 			v.action();
 			JB:DebugPrint("Selected option '"..v.text.."' in context menu.");
