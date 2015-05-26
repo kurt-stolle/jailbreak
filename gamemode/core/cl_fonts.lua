@@ -84,6 +84,14 @@ surface.CreateFont("JBLarge",{
 })
 
 
+surface.CreateFont("JBLargeBold",{
+	font = JB.Config.font,
+	size = 27,
+	weight = 600
+})
+
+
+
 surface.CreateFont("JBExtraLargeShadow",{
 	font = JB.Config.font,
 	size = 41,
@@ -98,12 +106,12 @@ surface.CreateFont("JBExtraLarge",{
 
 surface.CreateFont("JBExtraExtraLargeShadow",{
 	font = JB.Config.font,
-	size = 75,
+	size = 64,
 	weight = 400,
 	blursize = 2,
 })
 surface.CreateFont("JBExtraExtraLarge",{
 	font = JB.Config.font,
-	size = 75,
+	size = 64,
 	weight = 400
 })

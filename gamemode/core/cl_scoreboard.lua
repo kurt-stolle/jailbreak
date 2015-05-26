@@ -30,15 +30,21 @@
 -- ##                                                                                ##
 -- ####################################################################################
 
+-- Support for admin mods below
+(FindMetaTable("Player"))._jbGetRank = function(self)
+	if ES then -- This server uses ExcLServer
+		return (self:ESGetRank():GetPower() > 0 and self:ESGetRank():GetPrettyName()) or "";
+	else -- This server uses an unknown admin mod
+		return self:GetUserGroup() or ""
+	end
+end
 
+-- Scoreboard
 local scoreboard;
-
-local _Material = Material( "pp/toytown-top" )
-_Material:SetTexture( "$fbtexture", render.GetScreenEffectTexture() )
-
 local matEdge = Material("materials/jailbreak_excl/scoreboard_edge.png");
 local matMiddle = Material("materials/jailbreak_excl/scoreboard_middle.png");
 local matAva = Material("materials/jailbreak_excl/scoreboard_avatar.png");
+local color_faded = Color(0,0,0,100)
 vgui.Register("JBScoreboard.PlayerRow",{
 	Init = function( self )
 
@@ -67,7 +73,12 @@ vgui.Register("JBScoreboard.PlayerRow",{
 		self:PerformLayout();
 
 	end,
-
+	OnCursorEntered = function(self)
+		self.hover = true;
+	end,
+	OnCursorExited = function(self)
+		self.hover = false;
+	end,
 	Think = function( self )
 
 		if ( !IsValid( self.Player ) ) then
@@ -90,6 +101,16 @@ vgui.Register("JBScoreboard.PlayerRow",{
 
 		if ( !IsValid( self.Player ) ) then
 			return
+		end
+
+		--rank
+		if self.Player:_jbGetRank() ~= "" then
+			local x = 70;
+			surface.SetFont("JBExtraSmall")
+			local w,h = surface.GetTextSize(self.Player:_jbGetRank())
+			draw.RoundedBoxEx(6,x,2,w+12,h+4,JB.Color.black,true,true,false,false)
+			draw.RoundedBoxEx(4,x+1,3,w+10,h+4,JB.Color["#222"],true,true,false,false)
+			draw.SimpleText(self.Player:_jbGetRank(),"JBExtraSmall",x+6,8,white,0,1)
 		end
 
 
@@ -143,15 +164,27 @@ vgui.Register("JBScoreboard.PlayerRow",{
 
 		local white = self.Player:Alive() and JB.Color.white or JB.Color["#BBB"]
 
-		draw.SimpleText(self.Player:Nick(),"JBNormalShadow",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,JB.Color.black,0,1);
-		draw.SimpleText(self.Player:Nick(),"JBNormal",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,white,0,1);
+		--Name
+		local name=(self.hover and (self.Player:Deaths().." rounds" or "")..(ES and ", "..math.floor(tonumber(self.Player:ESGetNetworkedVariable("playtime",0))/60).." hours playtime" or "")) or self.Player:Nick();
+		draw.SimpleText(name,"JBSmallShadow",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,JB.Color.black,0,1);
+		draw.SimpleText(name,"JBSmall",self.Avatar.x + self.Avatar:GetWide() + 16,h/2 - 1,white,0,1);
 
+		--Ping
+		draw.SimpleText(self.Player:Ping(),"JBSmallShadow",self:GetWide() - 32 - 24,h/2 - 1,JB.Color.black,1,1);
+		draw.SimpleText(self.Player:Ping(),"JBSmall",self:GetWide() - 32 - 24,h/2 - 1,white,1,1);
+
+		--score
+		surface.SetDrawColor(color_faded)
+		surface.DrawRect(self:GetWide()-64-42,16,36,32)
+		local score=self.Player:Frags()..":"..self.Player:Deaths();
+		draw.SimpleText(score,"JBSmallShadow",self:GetWide() - 64-24,h/2 - 1,JB.Color.black,1,1);
+		draw.SimpleText(score,"JBSmall",self:GetWide() - 64-24,h/2 - 1,white,1,1);
+
+		--status
 		if self.Player.GetWarden and self.Player:GetWarden() then
-			draw.SimpleText("W","JBNormalShadow",w-32-24,h/2 - 1,JB.Color.black,1,1);
-			draw.SimpleText("W","JBNormal",w-32-24,h/2 - 1,white,1,1);
+			draw.SimpleText("Warden","JBLargeBold",self:GetWide()/2 + 26,26,color_faded,1)
 		elseif self.Player.GetRebel and self.Player:GetRebel() then
-			draw.SimpleText("R","JBNormalShadow",w-32-24,h/2 - 1,JB.Color.black,1,1);
-			draw.SimpleText("R","JBNormal",w-32-24,h/2 - 1,white,1,1);
+			draw.SimpleText("Rebel","JBLargeBold",self:GetWide()/2 + 30,26,color_faded,1)
 		end
 	end
 },"Panel");
@@ -265,6 +298,7 @@ vgui.Register("JBScoreboard",{
 		self.Header = self:Add( "Panel" )
 		self.Header:Dock( TOP )
 		self.Header:SetHeight( 100 )
+		self.Header:DockMargin(0,0,0,20)
 
 		self.Footer = self:Add( "Panel" )
 		self.Footer:Dock( BOTTOM )
@@ -323,23 +357,13 @@ vgui.Register("JBScoreboard",{
 			end
 		end
 
-		self.Host = self.Footer:Add( "DLabel" )
+		self.Host = self.Header:Add( "DLabel" )
 		self.Host:SetFont("JBNormal");
 		self.Host:SetTextColor( color_text );
 		self.Host:Dock(TOP);
 		self.Host:SetContentAlignment( 5 )
-		self.Host:SetText("Hosted by "..JB.Config.website);
+		self.Host:SetText("A gamemode by Excl, hosted by "..JB.Config.website);
 		self.Host:SizeToContents();
-
-		self.Credit = self.Footer:Add( "DLabel" )
-		self.Credit:SetFont("JBNormal");
-		self.Credit:SetTextColor( color_text );
-		self.Credit:Dock(TOP);
-		self.Credit:SetContentAlignment( 5 )
-		self.Credit:SetText("Created by Excl"); -- don't be a douche and remove my name here
-		self.Credit:SizeToContents();
-		self.Credit:DockMargin(0,3,0,0);
-
 
 		self.ScoresGuards = self:Add( "DScrollPanel" )
 		self.ScoresGuards:Dock( LEFT )
@@ -358,8 +382,6 @@ vgui.Register("JBScoreboard",{
 	PerformLayout = function( self )
 		self.ScoresGuards:SetWide(self:GetWide()/2 - 8);
 		self.ScoresPrisoners:SetWide(self:GetWide()/2 - 8);
-
-		self.Credit:SetWide(self:GetWide());
 		self.Host:SetWide(self:GetWide());
 
 		self.ScoresGuards:PerformLayout();
@@ -398,9 +420,7 @@ vgui.Register("JBScoreboard",{
 
 				self.Name:SetTextColor( color_text )
 				self.Host:SetTextColor( color_text );
-				self.Credit:SetTextColor( color_text );
 				self.Name:SetExpensiveShadow( 2, color_shadow )
-				self.Credit:SetExpensiveShadow( 1, color_shadow )
 				self.Host:SetExpensiveShadow( 1, color_shadow )
 
 				if #self.ScoresSpectators:GetChildren() <= 0 then
@@ -430,7 +450,6 @@ vgui.Register("JBScoreboard",{
 
 			self.Name:SetTextColor( color_text )
 				self.Host:SetTextColor( color_text );
-				self.Credit:SetTextColor( color_text );
 
 				if #self.ScoresSpectators:GetChildren() <= 0 then
 					self.Spectators:SetTextColor( color_hidden );
@@ -440,7 +459,6 @@ vgui.Register("JBScoreboard",{
 					self.Spectators:SetExpensiveShadow( 1, color_shadow )
 				end
 				self.Name:SetExpensiveShadow( 2, color_shadow )
-				self.Credit:SetExpensiveShadow( 1, color_shadow )
 				self.Host:SetExpensiveShadow( 1, color_shadow )
 
 		end

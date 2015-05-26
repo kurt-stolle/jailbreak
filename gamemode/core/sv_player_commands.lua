@@ -81,18 +81,27 @@ local function teamSwitch(p,cmd)
 		p:SendNotification("Switched to guards");
 
 		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
+
+		p:SetFrags(0);
+		p:SetDeaths(0);
 	elseif cmd == "jb_team_select_prisoner" and p:Team() ~= TEAM_PRISONER then
 		p:SetTeam(TEAM_PRISONER);
 		p:KillSilent();
 		p:SendNotification("Switched to prisoners");
 
 		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
+
+		p:SetFrags(0);
+		p:SetDeaths(0);
 	elseif cmd == "jb_team_select_spectator" and p:Team() ~= TEAM_SPECTATOR then
 		p:SetTeam(TEAM_SPECTATOR);
 		p:Spawn();
 		p:SendNotification("Switched to spectator mode");
 
 		hook.Call("JailBreakPlayerSwitchTeam",JB.Gamemode,p,p:Team());
+
+		p:SetFrags(0);
+		p:SetDeaths(0);
 	end
 
 

@@ -128,6 +128,106 @@ end
 
 /*
 
+Special days
+
+*/
+local function resetSpecial()
+	if SERVER then
+		game.ConsoleCommand("sv_gravity 600;\n")
+		game.ConsoleCommand("sv_friction 8;\n")
+	elseif CLIENT then
+
+	end
+end
+
+if SERVER then
+	JB.SpecialDays = {
+		["Low-Gravity Knife Party"] = function()
+			game.ConsoleCommand("sv_gravity 200;\n")
+			game.ConsoleCommand("sv_friction 3;\n")
+
+			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
+				v:SetJumpPower(400)
+				v:StripWeapons()
+				v:Give("weapon_jb_knife")
+			end
+
+			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
+				v:SetJumpPower(400)
+				v:StripWeapons()
+				v:Give("weapon_jb_knife")
+			end
+
+			for k,v in ipairs(ents.GetAll())do
+				if IsValid(v) and v.GetClass and string.Left(v:GetClass(),string.len("weapon_jb_")) == "weapon_jb_" and v:GetClass() ~= "weapon_jb_knife" then
+					v:Remove()
+				end
+			end
+
+			for k,v in ipairs(ents.FindByClass("func_door"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
+				v:Fire("Open",1)
+			end
+		end,
+		["Guns for everyone"] = function()
+			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
+				v:Give("weapon_jb_deagle")
+				v:SelectWeapon("weapon_jb_deagle")
+			end
+
+			for k,v in ipairs(ents.FindByClass("func_door"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
+				v:Fire("Open",1)
+			end
+		end,
+		["Super heros"] = function()
+			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
+				v:SetRunSpeed(600)
+				v:SetWalkSpeed(270)
+				v:SetJumpPower(400)
+			end
+
+			for k,v in ipairs(ents.FindByClass("func_door"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
+				v:Fire("Open",1)
+			end
+		end,
+		["Slow guards"] = function()
+			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
+				v:SetRunSpeed(100)
+				v:SetWalkSpeed(100)
+			end
+
+			for k,v in ipairs(ents.FindByClass("func_door"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+				v:Fire("Open",1)
+			end
+			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
+				v:Fire("Open",1)
+			end
+		end
+	}
+end
+
+/*
+
 Round System
 
 */
@@ -158,6 +258,26 @@ function JB:NewRound(rounds_passed)
 			end
 		end);
 
+		if JB.RoundsPassed == 1 then
+			local count=table.Count(JB.SpecialDays)
+			local which=math.random(1,count)
+			count=0;
+			for k,v in pairs(JB.SpecialDays)do
+				count=count+1
+				if count == which then
+					which=k;
+					break;
+				end
+			end
+
+
+			if JB.SpecialDays[which] then
+				JB:BroadcastNotification("First round: "..which)
+				JB.SpecialDays[which]();
+				JB.ThisRound.IsSpecialRound = true;
+			end
+		end
+
 		if IsValid(JB.TRANSMITTER) then
 			JB.TRANSMITTER:SetJBWarden_PVPDamage(false);
 			JB.TRANSMITTER:SetJBWarden_ItemPickup(false);
@@ -182,6 +302,10 @@ function JB:NewRound(rounds_passed)
 	hook.Call("JailBreakRoundStart",JB.Gamemode,JB.RoundsPassed);
 end
 function JB:EndRound(winner)
+	if JB.ThisRound.IsSpecialRound then
+		resetSpecial()
+	end
+
 	if SERVER then
 		if JB.RoundsPassed >= tonumber(JB.Config.roundsPerMap) and JB:Mapvote_StartMapVote() then
 			return; // Halt the round system; we're running a custom mapvote!
