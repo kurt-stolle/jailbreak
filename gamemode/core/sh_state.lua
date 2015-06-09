@@ -76,8 +76,7 @@ local function chainState(state,stateTime,stateCallback)
 	JB.State = state;
 
 	if timer.Exists("JB.StateTimer") then
-		timer.Stop("JB.StateTimer");
-		timer.Destroy("JB.StateTimer");
+		timer.Remove("JB.StateTimer");
 	end
 
 	timer.Create("JB.StateTimer",stateTime,1,stateCallback);

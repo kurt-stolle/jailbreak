@@ -59,7 +59,7 @@ function PLAYER:Spawn()
 	self.Player:GiveAmmo( 100, "SMG1", true )
 end
 
-local randomSpecialWeapon = { // Reminder to self: Never add weapons here; it ruins the game!
+local randomSpecialWeapon = {
 	"weapon_jb_knife",
 }
 function PLAYER:Loadout()

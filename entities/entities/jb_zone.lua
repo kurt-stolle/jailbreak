@@ -124,8 +124,8 @@ elseif CLIENT then
 		local mins,maxs=self:OBBMins(),self:OBBMaxs();
 
 		render.SetMaterial( tx )
-		render.DrawBox( self:GetPos(),self:GetAngles(),mins,maxs,ES.Color["#FF4411AA"],true)
-		render.DrawWireframeBox( self:GetPos(),self:GetAngles(),mins,maxs,ES.Color["#FFCCAAFF"],true)
+		render.DrawBox( self:GetPos(),self:GetAngles(),mins,maxs,JB.Color["#FF4411AA"],true)
+		render.DrawWireframeBox( self:GetPos(),self:GetAngles(),mins,maxs,JB.Color["#FFCCAAFF"],true)
 	end
 
 end
