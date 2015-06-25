@@ -72,14 +72,30 @@ end
 State chaining
 
 */
-local function chainState(state,stateTime,stateCallback)
-	JB.State = state;
+local chainState;
+if SERVER then
+	local stateTime = 0;
+	local stateCallback;
+	hook.Add("Think","JB.Think.StateLogic",function()
+		if stateTime > 0 and stateTime < CurTime() then
+			JB:DebugPrint("State chain ended")
 
-	if timer.Exists("JB.StateTimer") then
-		timer.Remove("JB.StateTimer");
+			stateTime = 0
+			stateCallback()
+		end
+	end)
+	chainState=function(state,time,callback)
+		JB:DebugPrint("State chained: "..tostring(state).." ["..tostring(time).." s]["..tostring(callback).."]")
+
+		JB.State = state;
+
+		stateTime=CurTime()+time;
+		stateCallback=callback;
 	end
 
-	timer.Create("JB.StateTimer",stateTime,1,stateCallback);
+	concommand.Add("testtime",function()
+		print(stateTime,CurTime(),stateTime<CurTime())
+	end)
 end
 
 /*
@@ -234,7 +250,6 @@ JB.ThisRound = {};
 local wantStartup = false;
 function JB:NewRound(rounds_passed)
 	rounds_passed = rounds_passed or JB.RoundsPassed;
-	collectgarbage("collect");
 
 	JB.ThisRound = {};
 
@@ -247,7 +262,7 @@ function JB:NewRound(rounds_passed)
 
 		chainState(STATE_SETUP,tonumber(JB.Config.setupTime),function()
 			JB:DebugPrint("Setup finished, round started.")
-			chainState(STATE_PLAYING,(10*60) - tonumber(JB.Config.setupTime),function()
+			chainState(STATE_PLAYING,(600) - tonumber(JB.Config.setupTime),function()
 				JB:EndRound();
 			end);
 
@@ -338,7 +353,7 @@ if CLIENT then
 		end
 	end);
 elseif SERVER then
-	timer.Create("JB.Time.RoundEndLogic",1,0,function()
+	timer.Create("JBRoundEndLogic",1,0,function()
 		if JB.State == STATE_IDLE and wantStartup then
 			if #team.GetPlayers(TEAM_GUARD) >= 1 and #team.GetPlayers(TEAM_PRISONER) >= 1 then
 				JB:DebugPrint("State is currently idle, but people have joined; Starting round 1.")

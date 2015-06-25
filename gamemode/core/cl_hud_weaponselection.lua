@@ -111,9 +111,9 @@ timer.Create("UpdateSWEPSelectthings",1,0,function()
 end)
 
 local nScroll = 1;
-hook.Add("PlayerBindPress","JB.PlayerBindPress.WeaponSelection", function(p, bind, pressed)
+function JB.Gamemode:PlayerBindPress(p, bind, pressed)
 
-	if not pressed then return end
+	if not pressed then return false end
 
 	if string.find(bind, "invnext") then
 		if LocalPlayer():Team() > 2 or !LocalPlayer():Alive() then return true  end
@@ -127,7 +127,6 @@ hook.Add("PlayerBindPress","JB.PlayerBindPress.WeaponSelection", function(p, bin
 		end
 		selectedTab = nScroll;
 		ArrangeSlots();
-		--RunConsoleCommand("use",slots[selectedTab][slotPos]:GetClass())
 		return true;
 	elseif string.find(bind, "invprev") then
 		if LocalPlayer():Team() > 2 or !LocalPlayer():Alive() then return true  end
@@ -142,7 +141,6 @@ hook.Add("PlayerBindPress","JB.PlayerBindPress.WeaponSelection", function(p, bin
 		end
 		selectedTab = nScroll;
 		ArrangeSlots();
-		--RunConsoleCommand("use",slots[selectedTab][slotPos]:GetClass())
 		return true;
 	elseif string.find(bind, "slot0") then
 		selectedTab = 0;
@@ -218,4 +216,6 @@ hook.Add("PlayerBindPress","JB.PlayerBindPress.WeaponSelection", function(p, bin
 			return true;
 		end
 	end
-end)
+
+	return false
+end
