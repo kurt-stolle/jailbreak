@@ -60,18 +60,51 @@ These are all custom hooks called by the gamemode.
 Format: `hookname ( arguments[, optional argument] )`
 
 ```lua
+-- JailBreakRoundStart
+-- Called when the round starts
 JailBreakRoundStart ( rounds_passed )
+
+-- JailBreakRoundEnd 
+-- Called when the round ends
 JailBreakRoundEnd ( rounds_passed )
-JailBreakStartMapvote ( rounds_passed, extentions_passed )// Return: true: Use custom mapvote system, false: Use default system (no mapvote).
+
+-- JailBreakPlayerSwitchTeam
+-- Called on team switch
+JailBreakPlayerSwitchTeam ( player, team )
+
+-- JailBreakStartMapvote
+-- Called when a mapvote should be started.
+-- return true: Use custom mapvote system, return false: Use default system (normally; no mapvote).
+JailBreakStartMapvote ( rounds_passed, extentions_passed ) 
+
+-- JailBreakClaimWarden
+-- Called when somebody claims warden
 JailBreakClaimWarden ( player, warden_rounds_in_a_row )
+
+-- JailBreakWardenControlChanged
+-- Called when a warden control is changed
 JailBreakWardenControlChanged	( player, option, value )
-JailBreakWardenSpawnProp		( player, type[, model] )
-JailBreakWardenPlacePointer		( player, type, position )
-JailBreakPlayerSwitchTeam		( player, team )
+
+-- JailBreakWardenSpawnProp
+-- Called when the warden spawns a prop
+JailBreakWardenSpawnProp ( player, type[, model] )
+
+-- JailBreakWardenPlacePointer
+-- Called when a pointer is placed
+JailBreakWardenPlacePointer ( player, type, position )
+
 ```
 
-Implement a hook using:
+Implement a hook using the `hook.Add` function, example:
 
 ```lua
-hook.add(hookName,hookID,function(arguments) yourcode() end)
+hook.Add("JailBreakRoundStart","JB.Examples.RoundStart",function(rounds_passed) 
+	if rounds_passed > 5 then
+		print "We are past round 5. Let's kill everyone!";
+		
+		for _,ply in ipairs( player.GetAll() ) do
+			ply:Kill();
+		end
+	end
+end);
 ```
