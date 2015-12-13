@@ -1,38 +1,32 @@
-========================================
-Jail Break 7 server operator information
-========================================
+# Jail Break 7
 
-#
-#	GAMEMODE CONFIG
-#   format: convar (value) :: explaination
-#
+## Configuration
 
-jb_config_debug 1/0                    	## Debug mode, you might want to set this to 0 to reduce annoying console messages 
-jb_config_font fontname              	## The gamemode's font. I disrecommend changing this; may cause everything to go weird!
-jb_config_website example.com        	## the URL of your website. This URL will be displayed as a form of advertising your site.
-jb_config_jointime 20 (minimum: 10)   	## (seconds) period when the map just loaded and people are given a chance to join.
-jb_config_setuptime 60 (minimum: 10)  	## (seconds) period at the start of the round when guards may claim warden.
-jb_config_guards_allowed 30 (minimum: 1) ## percentage of players allowed to be guard
-jb_config_guards_playtime 120			## (minutes) playtime required to be guard (admins bypass this)
-jb_config_rebel_sensitivity 0-2			## 2 = prisoner becomes rebel on killing a guard, 1 = prisoner becomes rebel on damaging a guard, 0 = prisoner never becomes rebel.
-jb_config_prisoners_namechange 1/0		## 1 = use fake names for prisoners (ex. Prisoner 192346), 0 = use normal nicknames for prisoners
-jb_config_warden_control_enabled 1/0	## toggles whether warden control should be enabled or not. (recommended: always 1);
-jb_config_prisoner_special_chance		## chance a prisoner will get a random weapon. Chance = random(1,var)==1;
-jb_config_max_warden_rounds				## maximum amount of rounds a player can be warden in a row. 
-jb_config_knives_are_concealed			## conceal knives - they won't draw on the player's tigh if this is set to 1.
-jb_config_rounds_per_map				## rounds until mapvote - ONLY SET THIS IF YOU HAVE A MAPVOTE SYSTEM ON YOUR SERVER/COMMUNITY
-jb_config_notify_lastguard 1/0			## send the "last guard kills all" notification
+The following convars can be put in your `./cfg/server.cfg` file.
 
-(put these values in your server.cfg)
+Convar                                     | Effect
+-------------------------------------------|----------------------------------------------------------------------------------
+`jb_config_debug 1/0`                      | Debug mode, you might want to set this to 0 to reduce annoying console messages 
+`jb_config_font fontname`                  | The gamemode's font. I disrecommend changing this; may cause everything to go weird!
+`jb_config_website example.com`            | The URL of your website. This URL will be displayed as a form of advertising your site.
+`jb_config_jointime 20` [minimum: 10]      | (seconds) period when the map just loaded and people are given a chance to join.
+`jb_config_setuptime 60` [minimum: 10]     | (seconds) period at the start of the round when guards may claim warden.
+`jb_config_guards_allowed 30` [minimum: 1] | Percentage of players allowed to be guard
+`jb_config_guards_playtime 120`            | (minutes) playtime required to be guard (admins bypass this)
+`jb_config_rebel_sensitivity 0-2`          | 2 = prisoner becomes rebel on killing a guard, 1 = prisoner becomes rebel on damaging a guard, 0 = prisoner never becomes rebel.
+`jb_config_prisoners_namechange 1/0`       | 1 = use fake names for prisoners (ex. Prisoner 192346), 0 = use normal nicknames for prisoners
+`jb_config_warden_control_enabled 1/0`     | Toggles whether warden control should be enabled or not. (recommended: always 1);
+`jb_config_prisoner_special_chance`        | Chance a prisoner will get a random weapon. Chance = random(1,var)==1;
+`jb_config_max_warden_rounds`              | Maximum amount of rounds a player can be warden in a row. 
+`jb_config_knives_are_concealed`           | Conceal knives - they won't draw on the player's tigh if this is set to 1.
+`jb_config_rounds_per_map`                 | Rounds until mapvote - ONLY SET THIS IF YOU HAVE A MAPVOTE SYSTEM ON YOUR SERVER/COMMUNITY
+`jb_config_notify_lastguard 1/0`           | Send the "last guard kills all" notification
 
-========================================
-Jail Break 7 server operator information
-========================================
+## Developers
 
-#
-#   LAST REQUESTS
-#	This is how last requests are added. LR files have to put put in the lastrequests folder.
-#
+### Last requests
+This is how last requests are added. LR files have to put put in the lastrequests folder.
+```lua
 
 	-- Initialize a new LR class
 	local LR = JB.CLASS_LR();
@@ -58,20 +52,26 @@ Jail Break 7 server operator information
 
 	-- Tell JailBreak that this LR is ready for use.
 	LR();
+```
 
-__________________________________
+### Hooks
 
-# 
-#	GAMEMODE HOOKS
-#	format: hookname ( arguments[, optional argument] ) -> return
-#	
+These are all custom hooks called by the gamemode.
+Format: `hookname ( arguments[, optional argument] )`
 
-JailBreakRoundStart 			( rounds_passed )							-> nil
-JailBreakRoundEnd				( rounds_passed )							-> nil
-JailBreakStartMapvote 			( rounds_passed, extentions_passed ) 		-> true: Use custom mapvote system, false: Use default system (no mapvote).
-JailBreakClaimWarden			( player, warden_rounds_in_a_row )			-> nil
-JailBreakWardenControlChanged	( player, option, value )					-> nil
-JailBreakWardenSpawnProp		( player, type[, model] )					-> nil
-JailBreakWardenPlacePointer		( player, type, position )					-> nil
-JailBreakPlayerSwitchTeam		( player, team )							-> nil
+```lua
+JailBreakRoundStart ( rounds_passed )
+JailBreakRoundEnd ( rounds_passed )
+JailBreakStartMapvote ( rounds_passed, extentions_passed )// Return: true: Use custom mapvote system, false: Use default system (no mapvote).
+JailBreakClaimWarden ( player, warden_rounds_in_a_row )
+JailBreakWardenControlChanged	( player, option, value )
+JailBreakWardenSpawnProp		( player, type[, model] )
+JailBreakWardenPlacePointer		( player, type, position )
+JailBreakPlayerSwitchTeam		( player, team )
+```
 
+Implement a hook using:
+
+```lua
+hook.add(hookName,hookID,function(arguments) yourcode() end)
+```
