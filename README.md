@@ -7,7 +7,7 @@ The following convars can be put in your `./cfg/server.cfg` file.
 Convar                                     | Effect
 -------------------------------------------|----------------------------------------------------------------------------------
 `jb_config_debug 1/0`                      | Debug mode, you might want to set this to 0 to reduce annoying console messages 
-`jb_config_font fontname`                  | The gamemode's font. I disrecommend changing this; may cause everything to go weird!
+`jb_config_font Roboto`                  | The gamemode's font. I disrecommend changing this; may cause everything to go weird!
 `jb_config_website example.com`            | The URL of your website. This URL will be displayed as a form of advertising your site.
 `jb_config_jointime 20` [minimum: 10]      | (seconds) period when the map just loaded and people are given a chance to join.
 `jb_config_setuptime 60` [minimum: 10]     | (seconds) period at the start of the round when guards may claim warden.
