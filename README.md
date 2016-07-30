@@ -3,6 +3,7 @@
 ## Configuration
 
 The following convars can be put in your `./cfg/server.cfg` file.
+It is recommended to not put convars in your config file unless you know exactly what the effect is the convar is. Invalid values may break the gamemode.
 
 Convar                                     | Effect
 -------------------------------------------|----------------------------------------------------------------------------------
