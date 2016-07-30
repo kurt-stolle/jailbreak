@@ -16,10 +16,10 @@ Convar                                     | Effect
 `jb_config_rebel_sensitivity 0-2`          | 2 = prisoner becomes rebel on killing a guard, 1 = prisoner becomes rebel on damaging a guard, 0 = prisoner never becomes rebel.
 `jb_config_prisoners_namechange 1/0`       | 1 = use fake names for prisoners (ex. Prisoner 192346), 0 = use normal nicknames for prisoners
 `jb_config_warden_control_enabled 1/0`     | Toggles whether warden control should be enabled or not. (recommended: always 1);
-`jb_config_prisoner_special_chance`        | Chance a prisoner will get a random weapon. Chance = random(1,var)==1;
-`jb_config_max_warden_rounds`              | Maximum amount of rounds a player can be warden in a row. 
-`jb_config_knives_are_concealed`           | Conceal knives - they won't draw on the player's tigh if this is set to 1.
-`jb_config_rounds_per_map`                 | Rounds until mapvote - ONLY SET THIS IF YOU HAVE A MAPVOTE SYSTEM ON YOUR SERVER/COMMUNITY
+`jb_config_prisoner_special_chance 8`        | Chance a prisoner will get a random weapon. Chance = random(1,var)==1;
+`jb_config_max_warden_rounds 3`              | Maximum amount of rounds a player can be warden in a row. 
+`jb_config_knives_are_concealed 1`           | Conceal knives - they won't draw on the player's tigh if this is set to 1.
+`jb_config_rounds_per_map 10`                 | Rounds until mapvote - ONLY SET THIS IF YOU HAVE A MAPVOTE SYSTEM ON YOUR SERVER/COMMUNITY
 `jb_config_notify_lastguard 1/0`           | Send the "last guard kills all" notification
 
 ## Developers
