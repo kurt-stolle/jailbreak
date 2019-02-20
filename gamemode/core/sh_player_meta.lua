@@ -34,7 +34,7 @@
 
 local pmeta = FindMetaTable("Player");
 function pmeta:CanPickupWeapon(entity)
-	if #self:GetWeapons() > 0 then
+	if table.Count(self:GetWeapons()) > 0 then
 		for k,v in pairs(self:GetWeapons()) do
 			if v.Slot == entity.Slot or v:GetClass() == entity:GetClass() then
 				return false
