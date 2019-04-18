@@ -34,8 +34,6 @@
 
 hook.Add("OnEntityCreated","JB.OnEntityCreated.InvalidateDefaultWeapons",function(e)
 	if string.lower(string.Left(e:GetClass(),6)) == "weapon" or e:IsWeapon() then
-		e.IsDropped = true;
-		e.BeingPickedUp = false;
 		timer.Simple(0,function()
 			if not IsValid(e) then return end
 			e.IsDropped = true;
