@@ -41,13 +41,8 @@ JB.Gamemode.PlayerSpawnAsSpectator = function(gm,ply)
 	end
 
 	local canspec = {};
-	for _,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-		if IsValid(v) and v:Alive() then
-			table.insert(canspec,v);
-		end
-	end
-	for _,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-		if IsValid(v) and v:Alive() then
+	for _,v in ipairs(player.GetAll())do
+		if v:Alive() and (v:Team() == TEAM_GUARD or v:Team() == TEAM_PRISONER) then
 			table.insert(canspec,v);
 		end
 	end
@@ -76,13 +71,8 @@ hook.Add( "KeyPress", "JB.KeyPress.HandleSpectateControls", function(p,key)
 			if not p.spec then p.spec = 1 end
 
 			local canspec = {};
-			for _,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-				if IsValid(v) and v:Alive() then
-					table.insert(canspec,v);
-				end
-			end
-			for _,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				if IsValid(v) and v:Alive() then
+			for _,v in ipairs(player.GetAll())do
+				if v:Alive() and (v:Team() == TEAM_GUARD or v:Team() == TEAM_PRISONER) then
 					table.insert(canspec,v);
 				end
 			end

@@ -47,8 +47,8 @@ local function claimWarden(p,c,a)
 		p.wardenRounds = p.wardenRounds + 1;
 	end
 
-	for _,v in pairs(team.GetPlayers(TEAM_GUARD))do
-		if IsValid(v) and v ~= p and p.wardenRounds then 
+	for _,v in ipairs(player.GetAll())do
+		if v:Team() == TEAM_GUARD and v ~= p and p.wardenRounds then 
 			p.wardenRounds = 0;
 		end
 	end
@@ -77,20 +77,26 @@ concommand.Add("jb_warden_changecontrol",function(p,c,a)
 
 	hook.Call("JailBreakWardenControlChanged",JB.Gamemode,p,opt,val);
 end);
-
+ 
+JB.WardenProps = {}
+hook.Add("JailBreakRoundEnd", "Clear WardenProps", function()
+	JB.WardenProps = {}
+end)
 local function spawnProp(p,typ,model)
 	local spawned = 0;
-	for k,v in pairs(ents.GetAll())do
-		if v and IsValid(v) and v.wardenSpawned then
+	for k,v in pairs(JB.WardenProps)do
+		if IsValid(v) then
 			spawned = spawned + 1;
+			if spawned > tonumber(JB.Config.maxWardenItems) then
+				p:SendQuickNotification("You can not spawn over "..tostring(JB.Config.maxWardenItems).." items.");	
+				return
+			end
 		end
 	end
-	if spawned > tonumber(JB.Config.maxWardenItems) then
-		p:SendQuickNotification("You can not spawn over "..tostring(JB.Config.maxWardenItems).." items.");
-		return
-	end
-
+	
 	local prop = ents.Create(typ);
+	if not IsValid(prop) then return end
+	table.insert(JB.WardenProps, prop)
 	prop:SetAngles(p:GetAngles());
 	prop:SetPos(p:EyePos() + p:GetAngles():Forward() * 60);
 	

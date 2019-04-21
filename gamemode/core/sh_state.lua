@@ -55,7 +55,7 @@
 --
 --
 --------------------------------------------------------------------------------------
-
+local team = team
 
 /*
 
@@ -130,7 +130,7 @@ STATE_PLAYING = 3; -- normal playing
 STATE_LASTREQUEST = 4; -- last request taking place, special rules apply
 STATE_ENDED = 5; -- round ended, waiting for next round to start
 STATE_MAPVOTE = 6; -- voting for a map, will result in either a new map loading or restarting the current without reloading
-
+local STATE_PLAYING, STATE_SETUP, STATE_LASTREQUEST, STATE_IDLE = STATE_PLAYING, STATE_SETUP, STATE_LASTREQUEST, STATE_IDLE
 /*
 
 Network strings
@@ -161,28 +161,21 @@ if SERVER then
 			game.ConsoleCommand("sv_gravity 200;\n")
 			game.ConsoleCommand("sv_friction 3;\n")
 
-			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				v:SetJumpPower(400)
-				v:StripWeapons()
-				v:Give("weapon_jb_knife")
-			end
-
-			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-				v:SetJumpPower(400)
-				v:StripWeapons()
-				v:Give("weapon_jb_knife")
+			for k,v in ipairs(player.GetAll())do
+				if v:Team() == TEAM_PRISONER or v:Team() == TEAM_GUARD then
+					v:SetJumpPower(400)
+					v:StripWeapons()
+					v:Give("weapon_jb_knife")
+				end
 			end
 
 			for k,v in ipairs(ents.GetAll())do
-				if IsValid(v) and v.GetClass and string.Left(v:GetClass(),string.len("weapon_jb_")) == "weapon_jb_" and v:GetClass() ~= "weapon_jb_knife" then
+				if v.GetClass and string.Left(v:GetClass(),string.len("weapon_jb_")) == "weapon_jb_" and v:GetClass() ~= "weapon_jb_knife" then
 					v:Remove()
 				end
 			end
 
-			for k,v in ipairs(ents.FindByClass("func_door"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+			for k,v in ipairs(ents.FindByClass("func_door*"))do
 				v:Fire("Open",1)
 			end
 			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
@@ -190,15 +183,14 @@ if SERVER then
 			end
 		end,
 		["Guns for everyone"] = function()
-			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				v:Give("weapon_jb_deagle")
-				v:SelectWeapon("weapon_jb_deagle")
+			for k,v in ipairs(player.GetAll())do
+				if v:Team() == TEAM_PRISONER then
+					v:Give("weapon_jb_deagle")
+					v:SelectWeapon("weapon_jb_deagle")
+				end
 			end
 
-			for k,v in ipairs(ents.FindByClass("func_door"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+			for k,v in ipairs(ents.FindByClass("func_door*"))do
 				v:Fire("Open",1)
 			end
 			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
@@ -206,16 +198,15 @@ if SERVER then
 			end
 		end,
 		["Super heros"] = function()
-			for k,v in ipairs(team.GetPlayers(TEAM_PRISONER))do
-				v:SetRunSpeed(600)
-				v:SetWalkSpeed(270)
-				v:SetJumpPower(400)
+			for k,v in ipairs(player.GetAll())do
+				if v:Team() == TEAM_PRISONER then
+					v:SetRunSpeed(600)
+					v:SetWalkSpeed(270)
+					v:SetJumpPower(400)
+				end
 			end
 
-			for k,v in ipairs(ents.FindByClass("func_door"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+			for k,v in ipairs(ents.FindByClass("func_door*"))do
 				v:Fire("Open",1)
 			end
 			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
@@ -223,15 +214,14 @@ if SERVER then
 			end
 		end,
 		["Slow guards"] = function()
-			for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-				v:SetRunSpeed(100)
-				v:SetWalkSpeed(100)
+			for k,v in ipairs(player.GetAll())do
+				if v:Team() == TEAM_GUARD then
+					v:SetRunSpeed(100)
+					v:SetWalkSpeed(100)
+				end
 			end
 
-			for k,v in ipairs(ents.FindByClass("func_door"))do
-				v:Fire("Open",1)
-			end
-			for k,v in ipairs(ents.FindByClass("func_door_rotating"))do
+			for k,v in ipairs(ents.FindByClass("func_door*"))do
 				v:Fire("Open",1)
 			end
 			for k,v in ipairs(ents.FindByClass("func_movelinear"))do
@@ -355,13 +345,13 @@ if CLIENT then
 elseif SERVER then
 	timer.Create("JBRoundEndLogic",1,0,function()
 		if JB.State == STATE_IDLE and wantStartup then
-			if #team.GetPlayers(TEAM_GUARD) >= 1 and #team.GetPlayers(TEAM_PRISONER) >= 1 then
+			if team.HasPlayers(TEAM_GUARD) and team.HasPlayers(TEAM_PRISONER) then
 				JB:DebugPrint("State is currently idle, but people have joined; Starting round 1.")
 				JB:NewRound();
 			end
 		end
 
-		if (JB.State ~= STATE_PLAYING and JB.State ~= STATE_SETUP and JB.State ~= STATE_LASTREQUEST) or #team.GetPlayers(TEAM_GUARD) < 1 or #team.GetPlayers(TEAM_PRISONER) < 1 then return end
+		if (JB.State ~= STATE_PLAYING and JB.State ~= STATE_SETUP and JB.State ~= STATE_LASTREQUEST) or not team.HasPlayers(TEAM_GUARD) or not team.HasPlayers(TEAM_PRISONER) then return end
 
 		local count_guard = JB:AliveGuards();
 		local count_prisoner = JB:AlivePrisoners();

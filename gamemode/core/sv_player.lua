@@ -72,7 +72,7 @@ JB.Gamemode.PlayerCanPickupWeapon = function( gm, ply, entity )
 
 	if not ply:CanPickupWeapon(entity) then return false end
 
-	if entity.IsDropped and (not entity.BeingPickedUp or entity.BeingPickedUp ~= ply) then
+	if entity.IsDropped and entity.BeingPickedUp ~= ply then
 		return false;
 	end
 
@@ -99,8 +99,8 @@ JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
 	if victim.GetWarden and IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden() == victim:GetWarden() then
 		JB:BroadcastNotification("The warden has died")
 		timer.Simple(.5,function()
-			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				if v:Alive() and v ~= victim then
+			for k,v in pairs(player.GetAll())do
+				if v:Team() == TEAM_GUARD and v:Alive() and v ~= victim then
 					JB:BroadcastNotification("Prisoners get freeday");
 					break;
 				end

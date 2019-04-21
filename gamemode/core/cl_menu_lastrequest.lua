@@ -84,8 +84,8 @@ function JB.MENU_LR()
 		btn_accept.OnMouseReleased = (function()
 			local Menu = DermaMenu()
 
-			for k,v in pairs(team.GetPlayers(TEAM_GUARD))do
-				if not IsValid(v) then continue end
+			for k,v in pairs(player.GetAll())do
+				if v:Team() ~= TEAM_GUARD and not v:Alive() then continue end
 				
 				local btn = Menu:AddOption( v:Nick() or "Unknown guard",function() 
 					RunConsoleCommand("jb_lastrequest_start",lr_selected:GetID(),v:EntIndex());
@@ -99,8 +99,8 @@ function JB.MENU_LR()
 			Menu:AddSpacer()
 			Menu:AddOption( "Random guard",function()
 				local tab = {};
-				for k,v in ipairs(team.GetPlayers(TEAM_GUARD))do
-					if v:Alive() then 
+				for k,v in pairs(player.GetAll())do
+					if v:Alive() and v:Team() == TEAM_GUARD then 
 						table.insert(tab,v);
 					end					
 				end
