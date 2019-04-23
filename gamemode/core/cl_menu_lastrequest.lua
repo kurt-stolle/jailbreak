@@ -85,7 +85,7 @@ function JB.MENU_LR()
 			local Menu = DermaMenu()
 
 			for k,v in pairs(player.GetAll())do
-				if v:Team() ~= TEAM_GUARD and not v:Alive() then continue end
+				if v:Team() ~= TEAM_GUARD or not v:Alive() then continue end
 				
 				local btn = Menu:AddOption( v:Nick() or "Unknown guard",function() 
 					RunConsoleCommand("jb_lastrequest_start",lr_selected:GetID(),v:EntIndex());
