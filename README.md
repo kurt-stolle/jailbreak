@@ -1,4 +1,4 @@
-# Jail Break 7
+# JailBreak
 
 ## Configuration
 
