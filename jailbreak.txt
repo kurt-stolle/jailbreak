@@ -1,7 +1,7 @@
-"jailbreak"
+"Jail Break"
 {
 	"base"		"base"
-	"title"		"jailbreak"
+	"title"		"Jail Break"
 	"maps"		"^jb_"
 	"menusystem"	"1"
 }
