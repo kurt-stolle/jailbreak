@@ -4,8 +4,4 @@
 	"title"		"Jail Break"
 	"maps"		"^jb_"
 	"menusystem"	"1"
-
-	"settings"
-	{
-	}
 }
