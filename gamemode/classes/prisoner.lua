@@ -77,8 +77,6 @@ function PLAYER:SetupDataTables()
 end
 
 local prisonerModels = {
-
--- Black models (we add these a few times, so it increases the chance of a player being black, which makes the atmosphere of the game more "criminal")
 	Model("models/player/Group01/female_03.mdl"),
 	Model("models/player/Group01/female_05.mdl"),
 	Model("models/player/Group01/male_01.mdl"),
@@ -127,8 +125,6 @@ local prisonerModels = {
 	Model("models/player/Group01/female_05.mdl"),
 	Model("models/player/Group01/male_01.mdl"),
 	Model("models/player/Group01/male_03.mdl"),
-
--- Normal 'white' models
 	Model("models/player/Group01/female_02.mdl"),
 	Model("models/player/Group01/female_01.mdl"),
 	Model("models/player/Group01/female_04.mdl"),
