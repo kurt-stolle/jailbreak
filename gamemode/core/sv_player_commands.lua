@@ -65,9 +65,9 @@ local pickup = function(p)
 
 	if IsValid(e) and p:Alive() and p:CanPickupWeapon( e )  then
 		e.BeingPickedUp = p;
+		JB:DamageLog_AddPlayerPickup( p,e:GetClass() )
 	end
 
-	JB:DamageLog_AddPlayerPickup( p,e:GetClass() )
 end
 concommand.Add("jb_pickup",pickup)
 JB.Util.addChatCommand("pickup",pickup);
