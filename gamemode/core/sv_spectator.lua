@@ -67,8 +67,10 @@ local CTRL_CHANGE = bit.bor(IN_DUCK);
 
 hook.Add( "KeyPress", "JB.KeyPress.HandleSpectateControls", function(p,key)
 	if p:GetObserverMode() ~= OBS_MODE_NONE then
+		local doNext = tobool(bit.band(key,CTRL_NEXT));
+		local doPrev = tobool(bit.band(key,CTRL_PREV));
 		local doChange=tobool(bit.band(key,CTRL_CHANGE));
-
+		
 		if doNext or doPrev or doChange then
 
 			JB:DebugPrint(p:Nick().. " is using spectator controls. "..tostring(doNext).." "..tostring(doPrev).." "..tostring(doChange));
