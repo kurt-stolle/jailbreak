@@ -93,7 +93,7 @@ JB.Gamemode.IsSpawnpointSuitable = function()
 end
 
 JB.Gamemode.PlayerDeath = function(gm, victim, weapon, killer)
-
+	victim:StripWeapons()
 	victim:SendNotification("You are muted until the round ends")
 
 	if victim.GetWarden and IsValid(JB.TRANSMITTER) and JB.TRANSMITTER:GetJBWarden() == victim:GetWarden() then
